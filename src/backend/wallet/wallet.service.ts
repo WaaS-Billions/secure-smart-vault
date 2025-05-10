@@ -1,7 +1,6 @@
 
 import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { CreateWalletDto, TransactionDto, WalletType } from './dto/wallet.dto';
-import { ethers } from 'ethers';
 
 @Injectable()
 export class WalletService {

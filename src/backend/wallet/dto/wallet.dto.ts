@@ -1,6 +1,6 @@
 
-import { IsString, IsNotEmpty, IsArray, IsNumber, Min, Max, IsOptional, IsEnum } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+import { IsString, IsNumber, IsEnum, IsArray, Min, IsNotEmpty, IsOptional } from 'class-validator';
 
 export enum WalletType {
   PERSONAL = 'personal',
@@ -8,29 +8,24 @@ export enum WalletType {
 }
 
 export class CreateWalletDto {
-  @ApiProperty({ description: 'Name of the wallet' })
+  @ApiProperty({ description: 'Wallet name' })
   @IsString()
   @IsNotEmpty()
   name: string;
 
-  @ApiProperty({ description: 'List of signer addresses for this wallet' })
+  @ApiProperty({ description: 'Wallet type', enum: WalletType, default: WalletType.MULTIPARTY })
+  @IsEnum(WalletType)
+  @IsOptional()
+  type: WalletType;
+
+  @ApiProperty({ description: 'Array of signer addresses' })
   @IsArray()
-  @IsString({ each: true })
   signers: string[];
 
-  @ApiProperty({ description: 'Minimum number of signatures required for a transaction' })
+  @ApiProperty({ description: 'Number of signatures required for transactions' })
   @IsNumber()
   @Min(1)
   threshold: number;
-
-  @ApiProperty({ 
-    description: 'Type of wallet', 
-    enum: WalletType, 
-    default: WalletType.MULTIPARTY 
-  })
-  @IsEnum(WalletType)
-  @IsOptional()
-  type?: WalletType = WalletType.MULTIPARTY;
 }
 
 export class TransactionDto {
@@ -39,12 +34,12 @@ export class TransactionDto {
   @IsNotEmpty()
   to: string;
 
-  @ApiProperty({ description: 'Transaction amount in wei' })
+  @ApiProperty({ description: 'Amount to send' })
   @IsString()
   @IsNotEmpty()
   value: string;
 
-  @ApiProperty({ description: 'Transaction call data (hex encoded)' })
+  @ApiProperty({ description: 'Transaction data (optional)' })
   @IsString()
   @IsOptional()
   data?: string;
