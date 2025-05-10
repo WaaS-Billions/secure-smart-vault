@@ -2,8 +2,8 @@
 import { createConfig, http } from 'wagmi';
 import { mainnet, sepolia, localhost } from 'wagmi/chains';
 
-// Get projectId from environment variable
-const projectId = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID || 'YOUR_PROJECT_ID';
+// Use import.meta.env instead of process.env for Vite applications
+const projectId = import.meta.env.VITE_WALLETCONNECT_PROJECT_ID || 'YOUR_PROJECT_ID';
 
 export const config = createConfig({
   chains: [

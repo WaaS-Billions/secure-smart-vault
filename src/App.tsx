@@ -14,7 +14,7 @@ import CreateWallet from "./pages/CreateWallet";
 import WalletDetails from "./pages/WalletDetails";
 
 // Get projectId from environment variable
-const projectId = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID || 'YOUR_PROJECT_ID';
+const projectId = import.meta.env.VITE_WALLETCONNECT_PROJECT_ID || 'YOUR_PROJECT_ID';
 
 const queryClient = new QueryClient();
 
