@@ -3,9 +3,13 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import helmet from 'helmet';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  
+  // Apply Helmet for security headers
+  app.use(helmet());
   
   // Enable CORS for frontend
   app.enableCors();
@@ -19,6 +23,7 @@ async function bootstrap() {
     .setDescription('API for non-custodial smart wallet with MPC')
     .setVersion('1.0')
     .addTag('wallets')
+    .addTag('auth')
     .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config);

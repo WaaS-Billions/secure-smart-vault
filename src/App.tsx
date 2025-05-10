@@ -5,7 +5,6 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { WagmiProvider } from 'wagmi';
-import { createWeb3Modal } from "@web3modal/ethereum/react";
 import { config as wagmiConfig } from "@/lib/web3/wagmi-config";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
@@ -17,16 +16,7 @@ import WalletDetails from "./pages/WalletDetails";
 // Get projectId from environment variable
 const projectId = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID || 'YOUR_PROJECT_ID';
 
-// Initialize web3modal
-createWeb3Modal({
-  wagmiConfig,
-  projectId,
-  themeMode: 'light',
-  themeVariables: {
-    '--w3m-accent': '#3B82F6',
-  },
-});
-
+// Note: createWeb3Modal is now initialized in wagmi-config.ts
 const queryClient = new QueryClient();
 
 const App = () => (
