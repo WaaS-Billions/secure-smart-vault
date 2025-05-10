@@ -15,6 +15,8 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { useWallet } from '@/lib/web3/hooks/useWallet';
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import axios from 'axios';
 
 const CreateWallet = () => {
   const { isConnected, address } = useWallet();
@@ -25,6 +27,7 @@ const CreateWallet = () => {
   const [signers, setSigners] = useState('');
   const [threshold, setThreshold] = useState('2');
   const [isCreating, setIsCreating] = useState(false);
+  const [walletType, setWalletType] = useState('personal'); // 'personal' or 'multiparty'
 
   const handleCreateWallet = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -41,49 +44,75 @@ const CreateWallet = () => {
     try {
       setIsCreating(true);
       
-      // Split signers by newline and remove empty lines
-      const signerAddresses = signers
-        .split('\n')
-        .map(signer => signer.trim())
-        .filter(Boolean);
+      // Prepare data based on wallet type
+      let signerAddresses: string[] = [];
+      let thresholdValue = 1;
       
-      if (signerAddresses.length === 0) {
-        toast({
-          title: "Invalid signers",
-          description: "Please add at least one signer.",
-          variant: "destructive",
-        });
-        return;
+      if (walletType === 'multiparty') {
+        // Split signers by newline and remove empty lines
+        signerAddresses = signers
+          .split('\n')
+          .map(signer => signer.trim())
+          .filter(Boolean);
+        
+        if (signerAddresses.length === 0) {
+          toast({
+            title: "Invalid signers",
+            description: "Please add at least one signer.",
+            variant: "destructive",
+          });
+          setIsCreating(false);
+          return;
+        }
+        
+        // Include the current user's address as a signer if not already included
+        if (!signerAddresses.includes(address!)) {
+          signerAddresses.push(address!);
+        }
+        
+        // Validate threshold
+        thresholdValue = parseInt(threshold, 10);
+        if (isNaN(thresholdValue) || thresholdValue <= 0 || thresholdValue > signerAddresses.length) {
+          toast({
+            title: "Invalid threshold",
+            description: `Threshold must be between 1 and ${signerAddresses.length}.`,
+            variant: "destructive",
+          });
+          setIsCreating(false);
+          return;
+        }
+      } else {
+        // For personal wallets, only the current user is a signer
+        signerAddresses = [address!];
+        thresholdValue = 1; // Only one signature required
       }
       
-      // Include the current user's address as a signer if not already included
-      if (!signerAddresses.includes(address!)) {
-        signerAddresses.push(address!);
-      }
+      // Create wallet data
+      const walletData = {
+        name: walletName,
+        signers: signerAddresses,
+        threshold: thresholdValue,
+        type: walletType
+      };
       
-      // Validate threshold
-      const thresholdValue = parseInt(threshold, 10);
-      if (isNaN(thresholdValue) || thresholdValue <= 0 || thresholdValue > signerAddresses.length) {
-        toast({
-          title: "Invalid threshold",
-          description: `Threshold must be between 1 and ${signerAddresses.length}.`,
-          variant: "destructive",
-        });
-        return;
-      }
-      
-      // In a real app, this would call your API to deploy the wallet
-      // For now, we'll simulate a successful creation
-      setTimeout(() => {
-        const walletAddress = `0x${Math.random().toString(16).substring(2, 42)}`;
+      try {
+        // Call your API to create the wallet
+        const response = await axios.post('/api/wallet', walletData);
         
         toast({
           title: "Wallet created successfully",
           description: "Your new smart wallet is ready to use.",
         });
         
-        navigate(`/wallet/${walletAddress}`);
-      }, 2000);
+        navigate(`/wallet/${response.data.address}`);
+      } catch (error) {
+        console.error("API error:", error);
+        toast({
+          title: "Failed to create wallet",
+          description: "There was an error creating your wallet. Please try again.",
+          variant: "destructive",
+        });
+      }
     } catch (error) {
       console.error("Failed to create wallet:", error);
       toast({
@@ -104,7 +133,7 @@ const CreateWallet = () => {
         <CardHeader>
           <CardTitle>Wallet Configuration</CardTitle>
           <CardDescription>
-            Set up your new MPC-based smart wallet with multiple signers.
+            Set up your new smart wallet with your preferred security model.
           </CardDescription>
         </CardHeader>
         <form onSubmit={handleCreateWallet}>
@@ -120,35 +149,68 @@ const CreateWallet = () => {
               />
             </div>
             
-            <div className="space-y-2">
-              <Label htmlFor="signers">
-                Additional Signers (One Ethereum address per line)
-              </Label>
-              <Textarea
-                id="signers"
-                placeholder="0x123...&#10;0x456...&#10;0x789..."
-                value={signers}
-                onChange={(e) => setSigners(e.target.value)}
-                rows={5}
-              />
-              <p className="text-sm text-muted-foreground">
-                Your address ({address ? `${address.slice(0, 6)}...${address.slice(-4)}` : 'Not connected'}) will be added automatically.
-              </p>
+            <div className="space-y-4">
+              <Label>Wallet Type</Label>
+              <RadioGroup
+                defaultValue="personal"
+                value={walletType}
+                onValueChange={setWalletType}
+                className="grid grid-cols-2 gap-4"
+              >
+                <div className="flex items-center space-x-2 border rounded-md p-4 hover:bg-accent cursor-pointer">
+                  <RadioGroupItem value="personal" id="personal" />
+                  <Label htmlFor="personal" className="cursor-pointer flex-1">
+                    <div className="font-medium">Personal Wallet</div>
+                    <p className="text-sm text-muted-foreground">
+                      Simple wallet controlled by a single address. Recommended for personal use.
+                    </p>
+                  </Label>
+                </div>
+                <div className="flex items-center space-x-2 border rounded-md p-4 hover:bg-accent cursor-pointer">
+                  <RadioGroupItem value="multiparty" id="multiparty" />
+                  <Label htmlFor="multiparty" className="cursor-pointer flex-1">
+                    <div className="font-medium">Multi-Party Wallet</div>
+                    <p className="text-sm text-muted-foreground">
+                      Advanced security with multiple signers. Ideal for teams and organizations.
+                    </p>
+                  </Label>
+                </div>
+              </RadioGroup>
             </div>
             
-            <div className="space-y-2">
-              <Label htmlFor="threshold">
-                Signature Threshold (How many signers are required)
-              </Label>
-              <Input
-                id="threshold"
-                type="number"
-                min="1"
-                value={threshold}
-                onChange={(e) => setThreshold(e.target.value)}
-                required
-              />
-            </div>
+            {walletType === 'multiparty' && (
+              <>
+                <div className="space-y-2">
+                  <Label htmlFor="signers">
+                    Additional Signers (One Ethereum address per line)
+                  </Label>
+                  <Textarea
+                    id="signers"
+                    placeholder="0x123...&#10;0x456...&#10;0x789..."
+                    value={signers}
+                    onChange={(e) => setSigners(e.target.value)}
+                    rows={5}
+                  />
+                  <p className="text-sm text-muted-foreground">
+                    Your address ({address ? `${address.slice(0, 6)}...${address.slice(-4)}` : 'Not connected'}) will be added automatically.
+                  </p>
+                </div>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="threshold">
+                    Signature Threshold (How many signers are required)
+                  </Label>
+                  <Input
+                    id="threshold"
+                    type="number"
+                    min="1"
+                    value={threshold}
+                    onChange={(e) => setThreshold(e.target.value)}
+                    required
+                  />
+                </div>
+              </>
+            )}
           </CardContent>
           
           <CardFooter className="flex justify-between">

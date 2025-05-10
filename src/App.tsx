@@ -4,7 +4,8 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { WagmiProvider } from 'wagmi';
+import { createConfig, http, WagmiProvider, createStorage } from 'wagmi';
+import { mainnet, sepolia } from 'wagmi/chains';
 import { config as wagmiConfig } from "@/lib/web3/wagmi-config";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
@@ -15,14 +16,12 @@ import WalletDetails from "./pages/WalletDetails";
 import OnRamp from "./pages/OnRamp";
 import OffRamp from "./pages/OffRamp";
 
-// Get projectId from environment variable
-const projectId = import.meta.env.VITE_WALLETCONNECT_PROJECT_ID || 'YOUR_PROJECT_ID';
-
+// Create a React Query client
 const queryClient = new QueryClient();
 
 const App = () => (
-  <WagmiProvider config={wagmiConfig}>
-    <QueryClientProvider client={queryClient}>
+  <QueryClientProvider client={queryClient}>
+    <WagmiProvider config={wagmiConfig}>
       <TooltipProvider>
         <Toaster />
         <Sonner />
@@ -40,8 +39,8 @@ const App = () => (
           </Routes>
         </BrowserRouter>
       </TooltipProvider>
-    </QueryClientProvider>
-  </WagmiProvider>
+    </WagmiProvider>
+  </QueryClientProvider>
 );
 
 export default App;

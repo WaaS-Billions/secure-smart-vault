@@ -1,34 +1,60 @@
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { PlusCircle, Wallet } from "lucide-react";
 import { useWallet } from '@/lib/web3/hooks/useWallet';
 import { useToast } from '@/hooks/use-toast';
+import axios from 'axios';
+
+interface SmartWallet {
+  address: string;
+  name: string;
+  balance: string;
+  signers: number;
+  threshold: number;
+  type: 'personal' | 'multiparty';
+}
 
 const Dashboard = () => {
   const navigate = useNavigate();
   const { isConnected, address, balance, symbol } = useWallet();
   const { toast } = useToast();
+  const [wallets, setWallets] = useState<SmartWallet[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   
-  // Mock data - in a real app, this would come from your API
-  const wallets = [
-    {
-      address: '0x1234567890abcdef1234567890abcdef12345678',
-      name: 'Personal Wallet',
-      balance: '1.25',
-      signers: 3,
-      threshold: 2
-    },
-    {
-      address: '0xabcdef1234567890abcdef1234567890abcdef12',
-      name: 'Team Treasury',
-      balance: '5.72',
-      signers: 5,
-      threshold: 3
+  // In a real app, this would fetch wallets from your API
+  useEffect(() => {
+    // Simulate API call
+    if (isConnected) {
+      setIsLoading(true);
+      
+      // Mock data for now
+      // In a real app, this would be: axios.get('/api/wallet')
+      setTimeout(() => {
+        setWallets([
+          {
+            address: '0x1234567890abcdef1234567890abcdef12345678',
+            name: 'Personal Wallet',
+            balance: '1.25',
+            signers: 1,
+            threshold: 1,
+            type: 'personal'
+          },
+          {
+            address: '0xabcdef1234567890abcdef1234567890abcdef12',
+            name: 'Team Treasury',
+            balance: '5.72',
+            signers: 5,
+            threshold: 3,
+            type: 'multiparty'
+          }
+        ]);
+        setIsLoading(false);
+      }, 500);
     }
-  ];
+  }, [isConnected]);
   
   const handleConnectWallet = () => {
     // Open web3modal
@@ -84,7 +110,9 @@ const Dashboard = () => {
           
           <h2 className="text-2xl font-bold mb-4">Your Smart Wallets</h2>
           
-          {wallets.length === 0 ? (
+          {isLoading ? (
+            <div className="text-center py-8">Loading wallets...</div>
+          ) : wallets.length === 0 ? (
             <Card>
               <CardContent className="pt-6 text-center">
                 <p className="mb-4">You don't have any smart wallets yet</p>
@@ -103,10 +131,19 @@ const Dashboard = () => {
                   onClick={() => navigate(`/wallet/${wallet.address}`)}
                 >
                   <CardHeader className="pb-2">
-                    <CardTitle className="flex items-center">
-                      <Wallet className="mr-2 h-5 w-5" />
-                      {wallet.name}
-                    </CardTitle>
+                    <div className="flex items-center justify-between">
+                      <CardTitle className="flex items-center">
+                        <Wallet className="mr-2 h-5 w-5" />
+                        {wallet.name}
+                      </CardTitle>
+                      <span className={`text-xs px-2 py-1 rounded ${
+                        wallet.type === 'personal' 
+                          ? 'bg-blue-100 text-blue-800' 
+                          : 'bg-purple-100 text-purple-800'
+                      }`}>
+                        {wallet.type === 'personal' ? 'Personal' : 'Multi-Party'}
+                      </span>
+                    </div>
                     <CardDescription className="font-mono text-xs">
                       {wallet.address.substring(0, 6)}...{wallet.address.substring(38)}
                     </CardDescription>
@@ -119,7 +156,9 @@ const Dashboard = () => {
                       </div>
                       <div className="flex justify-between">
                         <span className="text-sm text-muted-foreground">Signers:</span>
-                        <span>{wallet.signers} ({wallet.threshold} required)</span>
+                        <span>
+                          {wallet.signers} {wallet.type === 'multiparty' && `(${wallet.threshold} required)`}
+                        </span>
                       </div>
                     </div>
                   </CardContent>
