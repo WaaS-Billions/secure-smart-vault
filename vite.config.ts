@@ -28,7 +28,14 @@ export default defineConfig(({ mode }) => ({
   },
   build: {
     rollupOptions: {
-      external: [/^@nestjs\/.*/],
+      external: [
+        /^@nestjs\/.*/,
+        'passport',
+        'passport-jwt',
+        'helmet',
+        'class-validator',
+        'class-transformer'
+      ],
     },
   },
 }));
