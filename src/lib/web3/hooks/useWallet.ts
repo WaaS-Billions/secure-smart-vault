@@ -1,16 +1,30 @@
 
 import { useState, useEffect } from 'react';
-import { useAccount, useBalance, useNetwork } from 'wagmi';
+import { useAccount, useBalance } from 'wagmi';
+import { useChainId } from 'wagmi';
 
 export function useWallet() {
   const { address, isConnected } = useAccount();
-  const { chain } = useNetwork();
+  const chainId = useChainId();
   const { data: balanceData } = useBalance({
     address,
-    enabled: Boolean(address),
   });
   
   const [isLoading, setIsLoading] = useState(true);
+  const [networkName, setNetworkName] = useState<string | undefined>(undefined);
+
+  useEffect(() => {
+    if (chainId) {
+      // Map chain IDs to network names
+      const networks: Record<number, string> = {
+        1: 'Ethereum Mainnet',
+        11155111: 'Sepolia',
+        31337: 'Localhost',
+      };
+      
+      setNetworkName(networks[chainId] || `Chain ID: ${chainId}`);
+    }
+  }, [chainId]);
 
   useEffect(() => {
     if (isConnected && balanceData) {
@@ -21,8 +35,8 @@ export function useWallet() {
   return {
     address,
     isConnected,
-    chainId: chain?.id,
-    networkName: chain?.name,
+    chainId,
+    networkName,
     balance: balanceData?.formatted,
     symbol: balanceData?.symbol,
     isLoading,
