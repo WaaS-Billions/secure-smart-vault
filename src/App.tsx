@@ -16,7 +16,6 @@ import WalletDetails from "./pages/WalletDetails";
 // Get projectId from environment variable
 const projectId = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID || 'YOUR_PROJECT_ID';
 
-// Note: createWeb3Modal is now initialized in wagmi-config.ts
 const queryClient = new QueryClient();
 
 const App = () => (

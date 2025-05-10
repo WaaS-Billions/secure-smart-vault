@@ -5,27 +5,27 @@ import { IsString, IsArray, IsNumber, IsEthereumAddress, IsOptional, Min } from 
 export class CreateWalletDto {
   @ApiProperty({ description: 'Wallet name' })
   @IsString()
-  name: string;
+  name!: string;
   
   @ApiProperty({ description: 'List of signer addresses', type: [String] })
   @IsArray()
   @IsEthereumAddress({ each: true })
-  signers: string[];
+  signers!: string[];
   
   @ApiProperty({ description: 'Number of signatures required', minimum: 1 })
   @IsNumber()
   @Min(1)
-  threshold: number;
+  threshold!: number;
 }
 
 export class TransactionDto {
   @ApiProperty({ description: 'Recipient address' })
   @IsEthereumAddress()
-  to: string;
+  to!: string;
   
   @ApiProperty({ description: 'Transaction value in wei' })
   @IsString()
-  value: string;
+  value!: string;
   
   @ApiProperty({ description: 'Transaction data (hex)', required: false })
   @IsOptional()
