@@ -12,6 +12,8 @@ import Dashboard from "./pages/Dashboard";
 import AdminDashboard from "./pages/AdminDashboard";
 import CreateWallet from "./pages/CreateWallet";
 import WalletDetails from "./pages/WalletDetails";
+import OnRamp from "./pages/OnRamp";
+import OffRamp from "./pages/OffRamp";
 
 // Get projectId from environment variable
 const projectId = import.meta.env.VITE_WALLETCONNECT_PROJECT_ID || 'YOUR_PROJECT_ID';
@@ -31,6 +33,8 @@ const App = () => (
             <Route path="/admin" element={<AdminDashboard />} />
             <Route path="/wallet/create" element={<CreateWallet />} />
             <Route path="/wallet/:address" element={<WalletDetails />} />
+            <Route path="/onramp" element={<OnRamp />} />
+            <Route path="/offramp" element={<OffRamp />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
