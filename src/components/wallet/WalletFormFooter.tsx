@@ -23,7 +23,7 @@ const WalletFormFooter = ({ isSubmitting }: WalletFormFooterProps) => {
       </Button>
       <Button 
         type="submit" 
-        className="gold-gradient text-navy hover:opacity-90"
+        className="bg-navy text-gold hover:bg-navy/90"
         disabled={isSubmitting}
       >
         {isSubmitting ? 'Creating...' : 'Create Wallet'}

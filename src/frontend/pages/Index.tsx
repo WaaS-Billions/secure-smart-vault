@@ -19,7 +19,7 @@ const Index = () => {
               Create and manage your smart wallets with multi-signature security
             </p>
             <div className="mt-auto">
-              <Button asChild size="lg" className="w-full gold-gradient text-navy hover:opacity-90">
+              <Button asChild size="lg" className="w-full bg-gold text-navy hover:bg-gold/90">
                 <Link to="/dashboard">Go to Dashboard</Link>
               </Button>
             </div>
@@ -31,7 +31,7 @@ const Index = () => {
               Set up a new non-custodial smart wallet for your assets
             </p>
             <div className="mt-auto">
-              <Button asChild variant="outline" size="lg" className="w-full border-gold text-gold hover:bg-gold/10">
+              <Button asChild variant="outline" size="lg" className="w-full bg-gold text-navy hover:bg-gold/90 border-none">
                 <Link to="/wallet/create">Create Wallet</Link>
               </Button>
             </div>
@@ -45,7 +45,7 @@ const Index = () => {
               Purchase cryptocurrency with your credit card or bank account
             </p>
             <div className="mt-auto">
-              <Button asChild variant="outline" size="lg" className="w-full border-gold text-gold hover:bg-gold/10">
+              <Button asChild variant="outline" size="lg" className="w-full bg-gold text-navy hover:bg-gold/90 border-none">
                 <Link to="/onramp">On-Ramp</Link>
               </Button>
             </div>
@@ -57,7 +57,7 @@ const Index = () => {
               Convert your cryptocurrency to fiat and withdraw to your bank
             </p>
             <div className="mt-auto">
-              <Button asChild variant="outline" size="lg" className="w-full border-gold text-gold hover:bg-gold/10">
+              <Button asChild variant="outline" size="lg" className="w-full bg-gold text-navy hover:bg-gold/90 border-none">
                 <Link to="/offramp">Off-Ramp</Link>
               </Button>
             </div>
