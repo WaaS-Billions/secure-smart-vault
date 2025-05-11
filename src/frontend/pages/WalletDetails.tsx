@@ -6,6 +6,7 @@ import WalletHeader from '@/components/wallet/WalletHeader';
 import WalletOverviewTab from '@/components/wallet/WalletOverviewTab';
 import TransactionsTab from '@/components/wallet/TransactionsTab';
 import SignersTab from '@/components/wallet/SignersTab';
+import GoBackButton from '@/components/common/GoBackButton';
 
 const WalletDetails = () => {
   const { address } = useParams<{ address: string }>();
@@ -53,6 +54,10 @@ const WalletDetails = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
+      <div className="mb-6">
+        <GoBackButton />
+      </div>
+      
       <WalletHeader 
         name={wallet.name} 
         address={wallet.address} 
@@ -61,23 +66,29 @@ const WalletDetails = () => {
       
       <div className="mt-8">
         <Tabs defaultValue="overview">
-          <TabsList className="grid w-full grid-cols-3">
+          <TabsList className="grid w-full grid-cols-3 glass-form">
             <TabsTrigger value="overview">Overview</TabsTrigger>
             <TabsTrigger value="transactions">Transactions</TabsTrigger>
             <TabsTrigger value="signers">Signers</TabsTrigger>
           </TabsList>
           <TabsContent value="overview" className="mt-6">
-            <WalletOverviewTab wallet={wallet} />
+            <div className="glass-form p-6">
+              <WalletOverviewTab wallet={wallet} />
+            </div>
           </TabsContent>
           <TabsContent value="transactions" className="mt-6">
-            <TransactionsTab transactions={wallet.transactions} />
+            <div className="glass-form">
+              <TransactionsTab transactions={wallet.transactions} />
+            </div>
           </TabsContent>
           <TabsContent value="signers" className="mt-6">
-            <SignersTab 
-              signers={wallet.signers} 
-              threshold={wallet.threshold} 
-              isMultisig={wallet.type === 'multisig'}
-            />
+            <div className="glass-form p-6">
+              <SignersTab 
+                signers={wallet.signers} 
+                threshold={wallet.threshold} 
+                isMultisig={wallet.type === 'multisig'}
+              />
+            </div>
           </TabsContent>
         </Tabs>
       </div>

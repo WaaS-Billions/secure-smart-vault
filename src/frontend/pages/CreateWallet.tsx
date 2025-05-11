@@ -5,12 +5,13 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Form } from '@/components/ui/form';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { useToast } from '@/components/ui/use-toast';
 import WalletTypeSelector from '@/components/wallet/WalletTypeSelector';
 import MultiPartySettings from '@/components/wallet/MultiPartySettings';
 import WalletNameInput from '@/components/wallet/WalletNameInput';
 import WalletFormFooter from '@/components/wallet/WalletFormFooter';
+import GoBackButton from '@/components/common/GoBackButton';
 
 // Define form schema
 const walletFormSchema = z.object({
@@ -76,9 +77,19 @@ const CreateWallet = () => {
 
   return (
     <div className="container max-w-2xl mx-auto py-8 px-4">
-      <h1 className="text-3xl font-bold mb-8">Create New Wallet</h1>
+      <div className="mb-6">
+        <GoBackButton />
+      </div>
       
-      <Card>
+      <h1 className="text-3xl font-bold mb-8 text-gold">Create New Wallet</h1>
+      
+      <Card className="glass-form">
+        <CardHeader>
+          <CardTitle className="text-navy">Wallet Configuration</CardTitle>
+          <CardDescription>
+            Set up your new smart wallet with your preferred security model.
+          </CardDescription>
+        </CardHeader>
         <CardContent className="pt-6">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">

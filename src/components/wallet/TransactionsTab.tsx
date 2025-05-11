@@ -25,9 +25,9 @@ interface TransactionsTabProps {
 
 const TransactionsTab = ({ transactions, threshold = 2 }: TransactionsTabProps) => {
   return (
-    <Card>
+    <Card className="glass-form">
       <CardHeader>
-        <CardTitle>Transaction History</CardTitle>
+        <CardTitle className="text-navy">Transaction History</CardTitle>
         <CardDescription>
           View all transactions for this wallet
         </CardDescription>
