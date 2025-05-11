@@ -1,6 +1,6 @@
 
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsNumber, IsEnum, IsOptional, Min, IsNotEmpty } from 'class-validator';
+import { IsString, IsNumber, IsEnum, Min, IsNotEmpty } from 'class-validator';
 
 export enum RampType {
   ON_RAMP = 'on_ramp',
