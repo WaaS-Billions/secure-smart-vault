@@ -7,8 +7,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useWallet } from '@/lib/web3/hooks/useWallet';
 import { QuoteDisplay } from '@/components/ramp/QuoteDisplay';
-import { useToast } from '@/hooks/use-toast';
-import TransactionReceipt from '@/components/ramp/TransactionReceipt';
+import TransactionReceipt from '@/frontend/components/ramp/TransactionReceipt';
+import { useToast } from '@/components/ui/use-toast';
 
 import {
   Card,
@@ -50,10 +50,10 @@ type OffRampFormValues = z.infer<typeof offRampSchema>;
 
 const OffRamp = () => {
   const { toast } = useToast();
-  const { address, isConnected, networkName } = useWallet();
+  const { address } = useWallet();
   const [quote, setQuote] = useState<any>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [transactionReceipt, setTransactionReceipt] = useState<any>(null);
+  const [transaction, setTransaction] = useState<any>(null);
 
   const form = useForm<OffRampFormValues>({
     resolver: zodResolver(offRampSchema),
@@ -65,7 +65,7 @@ const OffRamp = () => {
     },
   });
 
-  const { watch, handleSubmit, reset } = form;
+  const { watch, handleSubmit } = form;
   const amount = parseFloat(watch('amount') || '0');
   const fiatCurrency = watch('fiatCurrency');
   const cryptoAsset = watch('cryptoAsset');
@@ -104,23 +104,9 @@ const OffRamp = () => {
       return;
     }
     
-    // Check if on Sepolia network
-    if (networkName !== 'Sepolia') {
-      toast({
-        title: "Wrong network",
-        description: "Please switch to the Sepolia test network",
-        variant: "destructive",
-      });
-      return;
-    }
-    
     setIsSubmitting(true);
     
     try {
-      // Initiate the smart contract transaction
-      // In a real implementation, we would call the actual contract
-      // For this demo, we'll simulate the API call
-      
       // Submit the off-ramp request
       const response = await axios.post('/api/ramp/offramp', {
         ...data,
@@ -132,11 +118,21 @@ const OffRamp = () => {
         description: "Your transaction has been created successfully. You will receive funds in 2-3 business days.",
       });
       
-      // Set the transaction receipt data
-      setTransactionReceipt(response.data);
+      // Set transaction data for receipt
+      setTransaction({
+        id: response.data.id || `TX-${Math.random().toString(36).substring(2, 10).toUpperCase()}`,
+        date: new Date().toISOString(),
+        amount: data.amount,
+        cryptoAsset: data.cryptoAsset,
+        fiatAmount: quote?.fiatAmount || data.amount * (data.cryptoAsset === 'ETH' ? 2500 : 50000),
+        fiatCurrency: data.fiatCurrency,
+        status: 'completed',
+        paymentDetails: data.paymentDetails,
+        txHash: response.data.txHash || `0x${Math.random().toString(36).substring(2, 66)}`,
+      });
       
       // Reset form
-      reset();
+      form.reset();
       setQuote(null);
     } catch (error) {
       console.error('Error creating off-ramp:', error);
@@ -154,12 +150,15 @@ const OffRamp = () => {
     <div className="container max-w-2xl mx-auto py-8 px-4">
       <h1 className="text-3xl font-bold mb-8">Sell Crypto</h1>
       
-      {transactionReceipt ? (
+      {transaction ? (
         <div className="space-y-6">
-          <TransactionReceipt transaction={transactionReceipt} />
-          <div className="text-center">
-            <Button onClick={() => setTransactionReceipt(null)} variant="outline">
-              Start New Off-Ramp
+          <TransactionReceipt transaction={transaction} />
+          <div className="flex justify-center">
+            <Button 
+              onClick={() => setTransaction(null)}
+              variant="outline"
+            >
+              Create New Transaction
             </Button>
           </div>
         </div>
@@ -167,7 +166,7 @@ const OffRamp = () => {
         <Card>
           <CardHeader>
             <CardTitle>Off-Ramp</CardTitle>
-            <CardDescription>Convert crypto to fiat on Sepolia testnet</CardDescription>
+            <CardDescription>Convert crypto to fiat</CardDescription>
           </CardHeader>
           <CardContent>
             <Form {...form}>
@@ -282,7 +281,7 @@ const OffRamp = () => {
                   <Button 
                     type="submit" 
                     className="w-full" 
-                    disabled={isSubmitting || !quote || !address || networkName !== 'Sepolia'}
+                    disabled={isSubmitting || !quote || !address}
                   >
                     {isSubmitting ? (
                       <>
@@ -297,15 +296,11 @@ const OffRamp = () => {
                   </Button>
                 </div>
                 
-                {!address ? (
+                {!address && (
                   <FormDescription className="text-center text-amber-500">
                     Please connect your wallet to complete this transaction
                   </FormDescription>
-                ) : networkName !== 'Sepolia' ? (
-                  <FormDescription className="text-center text-amber-500">
-                    Please switch to the Sepolia test network
-                  </FormDescription>
-                ) : null}
+                )}
               </form>
             </Form>
           </CardContent>
