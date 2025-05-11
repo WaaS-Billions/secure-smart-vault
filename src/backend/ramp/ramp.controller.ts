@@ -2,7 +2,7 @@
 import { Controller, Post, Body, UseGuards, Req } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { RampService } from './ramp.service';
-import { OnRampDto, OffRampDto, QuoteDto } from './dto/ramp.dto';
+import { OnRampDto, OffRampDto, RampQuoteDto } from './dto/ramp.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { Request } from 'express';
 
@@ -13,7 +13,7 @@ export class RampController {
 
   @Post('quote')
   @ApiOperation({ summary: 'Get a quote for on/off-ramp' })
-  async getQuote(@Body() quoteDto: QuoteDto) {
+  async getQuote(@Body() quoteDto: RampQuoteDto) {
     return this.rampService.getQuote(quoteDto);
   }
 
