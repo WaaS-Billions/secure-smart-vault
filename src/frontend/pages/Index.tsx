@@ -7,9 +7,9 @@ const Index = () => {
   return (
     <div className="container mx-auto px-4 py-16">
       <div className="max-w-3xl mx-auto text-center">
-        <h1 className="text-4xl font-bold mb-6 text-gold">Non-Custodial Smart Wallet Platform</h1>
+        <h1 className="text-4xl font-bold mb-2 text-gold">Daily Wallet</h1>
         <p className="text-xl mb-8 text-white/90">
-          Create and manage secure, non-custodial smart wallets with multi-signature capabilities
+          Non-custodial smart wallet for borderless remittance and payments
         </p>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
