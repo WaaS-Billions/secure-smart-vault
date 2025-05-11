@@ -2,24 +2,27 @@
 import React from 'react';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
+import { FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form';
+import { Control } from 'react-hook-form';
 
 interface WalletNameInputProps {
-  walletName: string;
-  onWalletNameChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  control: Control<any>;
 }
 
-const WalletNameInput = ({ walletName, onWalletNameChange }: WalletNameInputProps) => {
+const WalletNameInput = ({ control }: WalletNameInputProps) => {
   return (
-    <div className="space-y-2">
-      <Label htmlFor="walletName">Wallet Name</Label>
-      <Input
-        id="walletName"
-        placeholder="My Smart Wallet"
-        value={walletName}
-        onChange={onWalletNameChange}
-        required
-      />
-    </div>
+    <FormField
+      control={control}
+      name="name"
+      render={({ field }) => (
+        <FormItem>
+          <FormLabel>Wallet Name</FormLabel>
+          <FormControl>
+            <Input placeholder="My Smart Wallet" {...field} />
+          </FormControl>
+        </FormItem>
+      )}
+    />
   );
 };
 

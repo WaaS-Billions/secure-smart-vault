@@ -3,26 +3,24 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 
 interface WalletFormFooterProps {
-  onCancel: () => void;
-  isCreating: boolean;
-  isConnected: boolean;
+  isSubmitting: boolean;
 }
 
-const WalletFormFooter = ({ onCancel, isCreating, isConnected }: WalletFormFooterProps) => {
+const WalletFormFooter = ({ isSubmitting }: WalletFormFooterProps) => {
   return (
-    <div className="flex justify-between">
+    <div className="flex justify-end space-x-4">
       <Button
         variant="outline"
-        onClick={onCancel}
         type="button"
+        onClick={() => window.history.back()}
       >
         Cancel
       </Button>
       <Button 
         type="submit" 
-        disabled={isCreating || !isConnected}
+        disabled={isSubmitting}
       >
-        {isCreating ? 'Creating...' : 'Create Wallet'}
+        {isSubmitting ? 'Creating...' : 'Create Wallet'}
       </Button>
     </div>
   );

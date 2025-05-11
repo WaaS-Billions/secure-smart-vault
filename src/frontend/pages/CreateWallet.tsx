@@ -7,10 +7,10 @@ import { z } from 'zod';
 import { Form } from '@/components/ui/form';
 import { Card, CardContent } from '@/components/ui/card';
 import { useToast } from '@/components/ui/use-toast';
-import { WalletTypeSelector } from '@/components/wallet/WalletTypeSelector';
-import { MultiPartySettings } from '@/components/wallet/MultiPartySettings';
-import { WalletNameInput } from '@/components/wallet/WalletNameInput';
-import { WalletFormFooter } from '@/components/wallet/WalletFormFooter';
+import WalletTypeSelector from '@/components/wallet/WalletTypeSelector';
+import MultiPartySettings from '@/components/wallet/MultiPartySettings';
+import WalletNameInput from '@/components/wallet/WalletNameInput';
+import WalletFormFooter from '@/components/wallet/WalletFormFooter';
 
 // Define form schema
 const walletFormSchema = z.object({

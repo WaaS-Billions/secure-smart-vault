@@ -3,54 +3,69 @@ import React from 'react';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
+import { FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form';
+import { Control } from 'react-hook-form';
 
 interface MultiPartySettingsProps {
-  signers: string;
-  threshold: string;
-  onSignersChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
-  onThresholdChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  connectedAddress: string | undefined;
+  control: Control<any>;
+  setValue: any;
+  watch: any;
 }
 
-const MultiPartySettings = ({ 
-  signers, 
-  threshold, 
-  onSignersChange, 
-  onThresholdChange, 
-  connectedAddress 
-}: MultiPartySettingsProps) => {
+const MultiPartySettings = ({ control, setValue, watch }: MultiPartySettingsProps) => {
+  // Modify the component to work with react-hook-form
   return (
-    <>
-      <div className="space-y-2">
-        <Label htmlFor="signers">
-          Additional Signers (One Ethereum address per line)
-        </Label>
-        <Textarea
-          id="signers"
-          placeholder="0x123...&#10;0x456...&#10;0x789..."
-          value={signers}
-          onChange={onSignersChange}
-          rows={5}
-        />
-        <p className="text-sm text-muted-foreground">
-          Your address ({connectedAddress ? `${connectedAddress.slice(0, 6)}...${connectedAddress.slice(-4)}` : 'Not connected'}) will be added automatically.
-        </p>
-      </div>
+    <div className="space-y-4">
+      <FormField
+        control={control}
+        name="signers"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Additional Signers (One Ethereum address per line)</FormLabel>
+            <FormControl>
+              <Textarea
+                placeholder="0x123...&#10;0x456...&#10;0x789..."
+                rows={5}
+                onChange={(e) => {
+                  const addresses = e.target.value
+                    .split('\n')
+                    .map(addr => addr.trim())
+                    .filter(Boolean)
+                    .map(addr => ({ address: addr, name: "" }));
+                  setValue("signers", addresses);
+                }}
+              />
+            </FormControl>
+            <p className="text-sm text-muted-foreground">
+              Your address will be added automatically.
+            </p>
+          </FormItem>
+        )}
+      />
       
-      <div className="space-y-2">
-        <Label htmlFor="threshold">
-          Signature Threshold (How many signers are required)
-        </Label>
-        <Input
-          id="threshold"
-          type="number"
-          min="1"
-          value={threshold}
-          onChange={onThresholdChange}
-          required
-        />
-      </div>
-    </>
+      <FormField
+        control={control}
+        name="threshold"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Signature Threshold (How many signers are required)</FormLabel>
+            <FormControl>
+              <Input
+                type="number"
+                min="1"
+                {...field}
+                onChange={(e) => {
+                  const value = parseInt(e.target.value);
+                  if (!isNaN(value) && value > 0) {
+                    field.onChange(value);
+                  }
+                }}
+              />
+            </FormControl>
+          </FormItem>
+        )}
+      />
+    </div>
   );
 };
 
