@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 import { WalletService } from './wallet.service';
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
-import { CreateWalletDto, TransactionDto } from './dto/wallet.dto';
+import { CreateWalletDto, TransactionDto, OffRampDto } from './dto/wallet.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { Request } from 'express';
 
@@ -53,5 +53,16 @@ export class WalletController {
     @Body() transactionDto: TransactionDto,
   ) {
     return this.walletService.createTransaction(req.user['id'], address, transactionDto);
+  }
+
+  @Post('offramp')
+  @ApiOperation({ summary: 'Process an off-ramp transaction' })
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  async processOffRamp(
+    @Req() req: Request,
+    @Body() offRampDto: OffRampDto,
+  ) {
+    return this.walletService.processOffRamp(req.user['id'], offRampDto);
   }
 }
