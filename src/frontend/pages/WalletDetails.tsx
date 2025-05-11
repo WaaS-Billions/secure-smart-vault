@@ -2,10 +2,10 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { WalletHeader } from '@/components/wallet/WalletHeader';
-import { WalletOverviewTab } from '@/components/wallet/WalletOverviewTab';
-import { TransactionsTab } from '@/components/wallet/TransactionsTab';
-import { SignersTab } from '@/components/wallet/SignersTab';
+import WalletHeader from '@/components/wallet/WalletHeader';
+import WalletOverviewTab from '@/components/wallet/WalletOverviewTab';
+import TransactionsTab from '@/components/wallet/TransactionsTab';
+import SignersTab from '@/components/wallet/SignersTab';
 
 const WalletDetails = () => {
   const { address } = useParams<{ address: string }>();
