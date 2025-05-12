@@ -14,6 +14,11 @@ import CreateWallet from "./pages/CreateWallet";
 import WalletDetails from "./pages/WalletDetails";
 import OnRamp from "./pages/OnRamp";
 import OffRamp from "./pages/OffRamp";
+import GetStarted from "./pages/GetStarted";
+import MerchantApply from "./pages/MerchantApply";
+import ApplicationSubmitted from "./pages/ApplicationSubmitted";
+import AdminLogin from "./pages/AdminLogin";
+import AdminAuthRequired from "./components/auth/AdminAuthRequired";
 import { useEffect } from "react";
 
 // Create a React Query client
@@ -34,12 +39,26 @@ const App = () => {
           <BrowserRouter>
             <Routes>
               <Route path="/" element={<Index />} />
+              <Route path="/get-started" element={<GetStarted />} />
+              <Route path="/merchant/apply" element={<MerchantApply />} />
+              <Route path="/application-submitted" element={<ApplicationSubmitted />} />
               <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/admin" element={<AdminDashboard />} />
               <Route path="/wallet/create" element={<CreateWallet />} />
               <Route path="/wallet/:address" element={<WalletDetails />} />
               <Route path="/onramp" element={<OnRamp />} />
               <Route path="/offramp" element={<OffRamp />} />
+              
+              {/* Admin routes */}
+              <Route path="/admin/login" element={<AdminLogin />} />
+              <Route 
+                path="/admin" 
+                element={
+                  <AdminAuthRequired>
+                    <AdminDashboard />
+                  </AdminAuthRequired>
+                } 
+              />
+              
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>

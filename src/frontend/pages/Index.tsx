@@ -5,62 +5,37 @@ import { Button } from '@/components/ui/button';
 
 const Index = () => {
   return (
-    <div className="container mx-auto px-4 py-16">
+    <div className="container mx-auto px-4 py-16 min-h-screen flex flex-col justify-center">
       <div className="max-w-3xl mx-auto text-center">
-        <h1 className="text-4xl font-bold mb-2 text-gold">Daily Wallet</h1>
-        <p className="text-xl mb-8 text-white/90">
+        <h1 className="text-5xl font-bold mb-2 text-gold">Daily Wallet</h1>
+        <p className="text-xl mb-10 text-white/90">
           Non-custodial smart wallet for borderless remittance and payments
         </p>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-          <div className="flex flex-col items-center p-6 glass-form">
-            <h2 className="text-xl font-bold mb-2 text-navy">Manage Wallets</h2>
-            <p className="text-center text-muted-foreground mb-4">
-              Create and manage your smart wallets with multi-signature security
-            </p>
-            <div className="mt-auto">
-              <Button asChild size="lg" className="w-full bg-gold text-navy hover:bg-gold/90">
-                <Link to="/dashboard">Go to Dashboard</Link>
-              </Button>
-            </div>
-          </div>
+        <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-6 justify-center mb-16">
+          <Button asChild size="lg" className="bg-gold text-navy hover:bg-gold/90 px-10 py-6 text-lg">
+            <Link to="/get-started">Get Started</Link>
+          </Button>
           
-          <div className="flex flex-col items-center p-6 glass-form">
-            <h2 className="text-xl font-bold mb-2 text-navy">Create New Wallet</h2>
-            <p className="text-center text-muted-foreground mb-4">
-              Set up a new non-custodial smart wallet for your assets
-            </p>
-            <div className="mt-auto">
-              <Button asChild variant="outline" size="lg" className="w-full bg-gold text-navy hover:bg-gold/90 border-none">
-                <Link to="/wallet/create">Create Wallet</Link>
-              </Button>
-            </div>
-          </div>
+          <Button asChild variant="outline" size="lg" className="border-gold text-gold hover:bg-gold/10 px-10 py-6 text-lg">
+            <Link to="/dashboard">Already have a Wallet</Link>
+          </Button>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="flex flex-col items-center p-6 glass-form">
-            <h2 className="text-xl font-bold mb-2 text-navy">Buy Crypto</h2>
-            <p className="text-center text-muted-foreground mb-4">
-              Purchase cryptocurrency with your credit card or bank account
-            </p>
-            <div className="mt-auto">
-              <Button asChild variant="outline" size="lg" className="w-full bg-gold text-navy hover:bg-gold/90 border-none">
-                <Link to="/onramp">On-Ramp</Link>
-              </Button>
-            </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16">
+          <div className="glass-form p-6 flex flex-col items-center">
+            <h3 className="text-xl font-semibold mb-3 text-navy">Secure</h3>
+            <p className="text-center text-muted-foreground">Non-custodial smart contracts keep your assets safe</p>
           </div>
           
-          <div className="flex flex-col items-center p-6 glass-form">
-            <h2 className="text-xl font-bold mb-2 text-navy">Sell Crypto</h2>
-            <p className="text-center text-muted-foreground mb-4">
-              Convert your cryptocurrency to fiat and withdraw to your bank
-            </p>
-            <div className="mt-auto">
-              <Button asChild variant="outline" size="lg" className="w-full bg-gold text-navy hover:bg-gold/90 border-none">
-                <Link to="/offramp">Off-Ramp</Link>
-              </Button>
-            </div>
+          <div className="glass-form p-6 flex flex-col items-center">
+            <h3 className="text-xl font-semibold mb-3 text-navy">Borderless</h3>
+            <p className="text-center text-muted-foreground">Send payments anywhere in the world instantly</p>
+          </div>
+          
+          <div className="glass-form p-6 flex flex-col items-center">
+            <h3 className="text-xl font-semibold mb-3 text-navy">Affordable</h3>
+            <p className="text-center text-muted-foreground">Lower fees than traditional remittance services</p>
           </div>
         </div>
       </div>
