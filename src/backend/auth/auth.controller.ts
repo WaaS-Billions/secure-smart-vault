@@ -1,49 +1,43 @@
 
-import { Controller, Get, Post, Body, UnauthorizedException, UseGuards, Request } from '@nestjs/common';
+import { Controller, Post, Body, Get, UseGuards, Request } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
-import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
+import { ApiTags, ApiOperation, ApiResponse, ApiBody } from '@nestjs/swagger';
+import { IsEmail, IsNotEmpty, MinLength } from 'class-validator';
 
-// Define a proper DTO for login
 export class LoginDto {
   @IsEmail()
   @IsNotEmpty()
   email: string;
-
-  @IsString()
+  
   @IsNotEmpty()
+  @MinLength(8)
   password: string;
 }
 
-@ApiTags('auth')
+@ApiTags('authentication')
 @Controller('auth')
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor(private readonly authService: AuthService) {}
 
   @Post('login')
-  @ApiOperation({ summary: 'Login with email and password' })
-  @ApiResponse({ status: 200, description: 'Successfully logged in' })
+  @ApiOperation({ summary: 'User login' })
+  @ApiResponse({ status: 200, description: 'Login successful' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiBody({ type: LoginDto })
   async login(@Body() loginDto: LoginDto) {
-    const user = await this.authService.validateUser(
-      loginDto.email,
-      loginDto.password,
-    );
-    
-    if (!user) {
-      throw new UnauthorizedException('Invalid credentials');
-    }
-    
-    return this.authService.login(user);
+    return this.authService.login(loginDto);
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get('verify')
-  @ApiOperation({ summary: 'Verify JWT token' })
-  @ApiResponse({ status: 200, description: 'Token is valid' })
+  @Get('profile')
+  @ApiOperation({ summary: 'Get user profile' })
+  @ApiResponse({ status: 200, description: 'Profile retrieved successfully' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  verifyToken(@Request() req) {
-    return { userId: req.user.id, email: req.user.email };
+  getProfile(@Request() req) {
+    return {
+      userId: req.user.userId,
+      email: req.user.email,
+    };
   }
 }

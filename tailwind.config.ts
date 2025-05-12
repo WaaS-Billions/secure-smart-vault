@@ -25,7 +25,7 @@ export default {
 				ring: 'hsl(var(--ring))',
 				background: 'hsl(var(--background))',
 				foreground: 'hsl(var(--foreground))',
-				navy: '#083149',
+				navy: '#121B39',
 				gold: '#D9C88B',
 				white: '#f7f7f7',
 				primary: {
@@ -95,7 +95,7 @@ export default {
 				'accordion-up': 'accordion-up 0.2s ease-out'
 			},
 			backgroundImage: {
-				'navy-gradient': 'linear-gradient(to bottom right, #083149, #05263a)',
+				'navy-gradient': 'linear-gradient(to bottom right, #121B39, #0a1022)',
 			}
 		}
 	},

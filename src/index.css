@@ -5,7 +5,7 @@
 
 @layer base {
   :root {
-    --background: 203 40% 16%; /* Navy blue #083149 */
+    --background: 222 39% 15%; /* Dark blue #121B39 */
     --foreground: 60 0% 97%; /* White #f7f7f7 */
 
     --card: 0 0% 100%;
@@ -14,11 +14,11 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 203 40% 16%; /* Navy blue #083149 */
+    --primary: 222 39% 15%; /* Dark blue #121B39 */
     --primary-foreground: 43 53% 70%; /* Gold #D9C88B */
 
     --secondary: 43 53% 70%; /* Gold #D9C88B */
-    --secondary-foreground: 203 40% 16%; /* Navy blue #083149 */
+    --secondary-foreground: 222 39% 15%; /* Dark blue #121B39 */
 
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
