@@ -8,11 +8,11 @@
     --background: 222 39% 15%; /* Dark blue #121B39 */
     --foreground: 60 0% 97%; /* White #f7f7f7 */
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card: 222 39% 15%; /* Dark blue #121B39 */
+    --card-foreground: 60 0% 97%; /* White #f7f7f7 */
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover: 222 39% 15%; /* Dark blue #121B39 */
+    --popover-foreground: 60 0% 97%; /* White #f7f7f7 */
 
     --primary: 222 39% 15%; /* Dark blue #121B39 */
     --primary-foreground: 43 53% 70%; /* Gold #D9C88B */
@@ -20,17 +20,17 @@
     --secondary: 43 53% 70%; /* Gold #D9C88B */
     --secondary-foreground: 222 39% 15%; /* Dark blue #121B39 */
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 222 39% 25%;
+    --muted-foreground: 60 0% 80%; /* Lighter white */
 
     --accent: 43 53% 70%; /* Gold #D9C88B */
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent-foreground: 222 39% 15%; /* Dark blue #121B39 */
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 60 0% 97%; /* White #f7f7f7 */
 
     --border: 43 53% 70%; /* Gold #D9C88B */
-    --input: 214.3 31.8% 91.4%;
+    --input: 222 39% 15%; /* Dark blue #121B39 */
     --ring: 43 53% 70%; /* Gold #D9C88B */
 
     --radius: 0.5rem;
@@ -93,11 +93,11 @@
 
 @layer components {
   .glass-card {
-    @apply backdrop-blur-md bg-white/80 border border-gold/30 shadow-lg;
+    @apply backdrop-blur-md bg-navy/80 border border-gold/30 shadow-lg;
   }
   
   .glass-form {
-    @apply backdrop-blur-lg bg-white/80 border border-gold/20 rounded-lg shadow-lg;
+    @apply backdrop-blur-lg bg-navy/80 border border-gold/20 rounded-lg shadow-lg;
   }
   
   .gold-gradient {
@@ -106,5 +106,21 @@
   
   .go-back-button {
     @apply flex items-center text-secondary hover:text-secondary/80 transition-colors;
+  }
+
+  .title-text {
+    @apply text-gold font-bold;
+  }
+  
+  .description-text {
+    @apply text-white;
+  }
+
+  .btn-gold {
+    @apply bg-gold text-navy hover:bg-gold/90 transition-colors;
+  }
+
+  .btn-navy {
+    @apply bg-navy text-gold hover:bg-navy/90 transition-colors;
   }
 }

@@ -14,13 +14,13 @@ const ApplicationSubmitted = () => {
             <div className="flex justify-center mb-4">
               <CheckCircle className="text-green-500 h-16 w-16" />
             </div>
-            <CardTitle className="text-2xl text-navy">Application Submitted!</CardTitle>
+            <CardTitle className="text-2xl text-gold">Application Submitted!</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="mb-4">
+            <p className="mb-4 text-white">
               Thank you for your interest in becoming a Daily Wallet merchant. We've received your application and our team will review it shortly.
             </p>
-            <p className="mb-2">
+            <p className="mb-2 text-white">
               You should receive a confirmation email with the next steps. We typically respond within 2-3 business days.
             </p>
           </CardContent>

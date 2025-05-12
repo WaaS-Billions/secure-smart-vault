@@ -9,10 +9,10 @@
     --foreground: 43 53% 70%; /* Gold #D9C88B */
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 47.4% 11.2%;
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 47.4% 11.2%;
+    --popover: 222 39% 15%; /* Dark blue #121B39 */
+    --popover-foreground: 43 53% 70%; /* Gold #D9C88B */
+    --card: 222 39% 15%; /* Dark blue #121B39 */
+    --card-foreground: 43 53% 70%; /* Gold #D9C88B */
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
     --primary: 222 39% 15%; /* Dark blue #121B39 */
@@ -28,25 +28,7 @@
   }
  
   .dark {
-    --background: 224 71% 4%;
-    --foreground: 213 31% 91%;
-    --muted: 223 47% 11%;
-    --muted-foreground: 215.4 16.3% 56.9%;
-    --popover: 224 71% 4%;
-    --popover-foreground: 215 20.2% 65.1%;
-    --card: 224 71% 4%;
-    --card-foreground: 213 31% 91%;
-    --border: 216 34% 17%;
-    --input: 216 34% 17%;
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 1.2%;
-    --secondary: 222.2 47.4% 11.2%;
-    --secondary-foreground: 210 40% 98%;
-    --accent: 216 34% 17%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 63% 31%;
-    --destructive-foreground: 210 40% 98%;
-    --ring: 216 34% 17%;
+    /* ... keep existing code (dark mode variables) */
   }
 }
 
@@ -57,5 +39,23 @@
   body {
     @apply bg-background text-foreground;
     font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+@layer components {
+  .title-text {
+    @apply text-gold font-bold;
+  }
+  
+  .description-text {
+    @apply text-white;
+  }
+
+  .btn-gold {
+    @apply bg-gold text-navy hover:bg-gold/90 transition-colors;
+  }
+
+  .btn-navy {
+    @apply bg-navy text-gold hover:bg-navy/90 transition-colors;
   }
 }
