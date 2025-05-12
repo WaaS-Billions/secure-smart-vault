@@ -5,8 +5,8 @@
 
 @layer base {
   :root {
-    --background: 212 48% 24%; /* Navy blue #104768 */
-    --foreground: 43 53% 70%; /* Gold #D9C88B */
+    --background: 203 40% 16%; /* Navy blue #083149 */
+    --foreground: 60 0% 97%; /* White #f7f7f7 */
 
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
@@ -14,11 +14,11 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 212 48% 24%; /* Navy blue #104768 */
+    --primary: 203 40% 16%; /* Navy blue #083149 */
     --primary-foreground: 43 53% 70%; /* Gold #D9C88B */
 
     --secondary: 43 53% 70%; /* Gold #D9C88B */
-    --secondary-foreground: 212 48% 24%; /* Navy blue #104768 */
+    --secondary-foreground: 203 40% 16%; /* Navy blue #083149 */
 
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
@@ -27,7 +27,7 @@
     --accent-foreground: 222.2 47.4% 11.2%;
 
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive-foreground: 60 0% 97%; /* White #f7f7f7 */
 
     --border: 43 53% 70%; /* Gold #D9C88B */
     --input: 214.3 31.8% 91.4%;
@@ -47,7 +47,7 @@
   }
 
   body {
-    @apply bg-primary text-foreground min-h-screen;
+    @apply bg-background text-foreground min-h-screen;
     position: relative;
   }
   

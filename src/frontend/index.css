@@ -1,12 +1,11 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 47.4% 11.2%;
+    --background: 203 40% 16%; /* Navy blue #083149 */
+    --foreground: 43 53% 70%; /* Gold #D9C88B */
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
     --popover: 0 0% 100%;
@@ -15,15 +14,15 @@
     --card-foreground: 222.2 47.4% 11.2%;
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-    --accent: 210 40% 96.1%;
+    --primary: 203 40% 16%; /* Navy blue #083149 */
+    --primary-foreground: 43 53% 70%; /* Gold #D9C88B */
+    --secondary: 43 53% 70%; /* Gold #D9C88B */
+    --secondary-foreground: 203 40% 16%; /* Navy blue #083149 */
+    --accent: 43 53% 70%; /* Gold #D9C88B */
     --accent-foreground: 222.2 47.4% 11.2%;
     --destructive: 0 100% 50%;
-    --destructive-foreground: 210 40% 98%;
-    --ring: 215 20.2% 65.1%;
+    --destructive-foreground: 60 0% 97%; /* White #f7f7f7 */
+    --ring: 43 53% 70%; /* Gold #D9C88B */
     --radius: 0.5rem;
   }
  
