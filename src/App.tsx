@@ -14,6 +14,9 @@ import CreateWallet from "./pages/CreateWallet";
 import WalletDetails from "./pages/WalletDetails";
 import OnRamp from "./pages/OnRamp";
 import OffRamp from "./pages/OffRamp";
+import Login from "./pages/Login";
+import { AuthProvider } from "./context/AuthContext";
+import RequireAuth from "./components/auth/RequireAuth";
 import { useEffect } from "react";
 
 // Create a React Query client
@@ -32,17 +35,50 @@ const App = () => {
           <Toaster />
           <Sonner />
           <BrowserRouter>
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/admin" element={<AdminDashboard />} />
-              <Route path="/wallet/create" element={<CreateWallet />} />
-              <Route path="/wallet/:address" element={<WalletDetails />} />
-              <Route path="/onramp" element={<OnRamp />} />
-              <Route path="/offramp" element={<OffRamp />} />
-              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-              <Route path="*" element={<NotFound />} />
-            </Routes>
+            <AuthProvider>
+              <Routes>
+                {/* Public routes */}
+                <Route path="/" element={<Index />} />
+                <Route path="/login" element={<Login />} />
+                
+                {/* Protected routes */}
+                <Route path="/dashboard" element={
+                  <RequireAuth>
+                    <Dashboard />
+                  </RequireAuth>
+                } />
+                <Route path="/wallet/create" element={
+                  <RequireAuth>
+                    <CreateWallet />
+                  </RequireAuth>
+                } />
+                <Route path="/wallet/:address" element={
+                  <RequireAuth>
+                    <WalletDetails />
+                  </RequireAuth>
+                } />
+                <Route path="/onramp" element={
+                  <RequireAuth>
+                    <OnRamp />
+                  </RequireAuth>
+                } />
+                <Route path="/offramp" element={
+                  <RequireAuth>
+                    <OffRamp />
+                  </RequireAuth>
+                } />
+                
+                {/* Admin routes */}
+                <Route path="/admin" element={
+                  <RequireAuth>
+                    <AdminDashboard />
+                  </RequireAuth>
+                } />
+                
+                {/* 404 catch-all */}
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </AuthProvider>
           </BrowserRouter>
         </TooltipProvider>
       </WagmiProvider>

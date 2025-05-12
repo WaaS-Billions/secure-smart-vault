@@ -32,12 +32,19 @@
     --border: 43 53% 70%; /* Gold #D9C88B */
     --input: 222 39% 15%; /* Dark blue #121B39 */
     --ring: 43 53% 70%; /* Gold #D9C88B */
+    
+    --sidebar: 222 39% 15%; /* Dark blue #121B39 */
+    --sidebar-foreground: 43 53% 70%; /* Gold #D9C88B */
+    --sidebar-border: 43 53% 30%; /* Darker gold */
+    --sidebar-accent: 43 53% 70%; /* Gold #D9C88B */
+    --sidebar-accent-foreground: 222 39% 15%; /* Dark blue #121B39 */
+    --sidebar-ring: 43 53% 70%; /* Gold #D9C88B */
 
     --radius: 0.5rem;
   }
 
   .dark {
-    /* ... keep existing code (dark mode variables) the same ... */
+    /* ... keep existing code (dark mode variables) */
   }
 }
 
@@ -122,5 +129,17 @@
 
   .btn-navy {
     @apply bg-navy text-gold hover:bg-navy/90 transition-colors;
+  }
+  
+  .paper-card {
+    @apply bg-white/5 backdrop-blur-md border border-gold/20 rounded-lg shadow-md;
+  }
+  
+  .sidebar-item {
+    @apply flex items-center gap-2 p-2 rounded-md w-full text-gold hover:bg-gold/10 transition-colors;
+  }
+  
+  .sidebar-item.active {
+    @apply bg-gold/10;
   }
 }
