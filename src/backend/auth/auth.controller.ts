@@ -32,7 +32,8 @@ export class AuthController {
   getProfile(@Request() req) {
     return {
       userId: req.user.id,
-      email: req.user.email
+      email: req.user.email,
+      fullName: req.user.fullName
     };
   }
 }

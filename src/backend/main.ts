@@ -14,6 +14,7 @@ async function bootstrap() {
   // Use validation pipe
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
 
+  // Setup Swagger
   const config = new DocumentBuilder()
     .setTitle('Daily Wallet API')
     .setDescription('API documentation for Daily Wallet application')
@@ -23,7 +24,10 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
 
+  // Start the server
   await app.listen(3000);
   console.log(`Application is running on: http://localhost:3000`);
+  console.log(`Swagger documentation available at: http://localhost:3000/api`);
 }
+
 bootstrap();

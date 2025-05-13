@@ -17,7 +17,7 @@ import OffRamp from "./pages/OffRamp";
 import Login from "./pages/Login";
 import { AuthProvider } from "./context/AuthContext";
 import RequireAuth from "./components/auth/RequireAuth";
-import AdminLogin from "./pages/AdminLogin";
+import AdminLogin from "./frontend/pages/AdminLogin";
 import AdminAuthRequired from "./frontend/components/auth/AdminAuthRequired";
 import { useEffect } from "react";
 
