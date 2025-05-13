@@ -16,6 +16,11 @@ export enum PaymentMethod {
   GOOGLE_PAY = 'google_pay',
 }
 
+export enum RampType {
+  ON_RAMP = 'onramp',
+  OFF_RAMP = 'offramp',
+}
+
 export class OnRampDto {
   @ApiProperty({ example: 100, description: 'Amount to convert' })
   @IsNumber()
@@ -127,5 +132,5 @@ export class RampQuoteDto {
   @ApiProperty({ enum: ['onramp', 'offramp'], example: 'onramp' })
   @IsString()
   @IsNotEmpty()
-  direction: 'onramp' | 'offramp';
+  type: 'onramp' | 'offramp';
 }
