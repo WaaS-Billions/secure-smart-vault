@@ -30,7 +30,7 @@ export class AuthController {
   @ApiResponse({ status: 200, description: 'Profile fetched successfully' })
   getProfile(@Request() req) {
     return {
-      userId: req.user.userId,
+      userId: req.user.id,
       email: req.user.email
     };
   }
