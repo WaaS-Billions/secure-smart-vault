@@ -129,8 +129,8 @@ export class RampQuoteDto {
   @IsNotEmpty()
   cryptoAsset: string;
 
-  @ApiProperty({ enum: ['onramp', 'offramp'], example: 'onramp' })
-  @IsString()
+  @ApiProperty({ enum: RampType, example: RampType.ON_RAMP })
+  @IsEnum(RampType)
   @IsNotEmpty()
   type: 'onramp' | 'offramp';
 }
