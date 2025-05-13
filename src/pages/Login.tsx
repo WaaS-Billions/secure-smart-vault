@@ -1,6 +1,6 @@
 
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -15,22 +15,37 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const { login, connectWallet, isLoading } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const { toast } = useToast();
+  
+  // Get the redirect path from location state or default to dashboard
+  const from = location.state?.from?.pathname || '/dashboard';
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     try {
       await login(email, password);
-      toast({
-        title: "Login successful",
-        description: "Welcome back to Daily Wallet!",
-      });
-      navigate('/dashboard');
+      // Navigate to the page they tried to visit or dashboard
+      navigate(from, { replace: true });
     } catch (error) {
       toast({
         title: "Login failed",
         description: "Please check your credentials and try again.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleConnectWallet = async () => {
+    try {
+      await connectWallet();
+      // Navigate to the page they tried to visit or dashboard
+      navigate(from, { replace: true });
+    } catch (error) {
+      toast({
+        title: "Wallet connection failed",
+        description: "Could not connect to your wallet.",
         variant: "destructive",
       });
     }
@@ -105,9 +120,10 @@ const Login = () => {
             </div>
             
             <Button 
-              onClick={connectWallet} 
+              onClick={handleConnectWallet}
               variant="outline" 
               className="w-full mt-4 border-gold/20 text-gold hover:bg-gold/10"
+              disabled={isLoading}
             >
               <Wallet className="mr-2 h-4 w-4" />
               Connect Wallet

@@ -17,6 +17,8 @@ import OffRamp from "./pages/OffRamp";
 import Login from "./pages/Login";
 import { AuthProvider } from "./context/AuthContext";
 import RequireAuth from "./components/auth/RequireAuth";
+import AdminLogin from "./pages/AdminLogin";
+import AdminAuthRequired from "./frontend/components/auth/AdminAuthRequired";
 import { useEffect } from "react";
 
 // Create a React Query client
@@ -69,10 +71,11 @@ const App = () => {
                 } />
                 
                 {/* Admin routes */}
+                <Route path="/admin/login" element={<AdminLogin />} />
                 <Route path="/admin" element={
-                  <RequireAuth>
+                  <AdminAuthRequired>
                     <AdminDashboard />
-                  </RequireAuth>
+                  </AdminAuthRequired>
                 } />
                 
                 {/* 404 catch-all */}

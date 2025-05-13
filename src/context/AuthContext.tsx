@@ -10,6 +10,7 @@ type User = {
   id: string;
   email?: string;
   address?: string;
+  fullName?: string;
   isWalletUser: boolean;
 };
 
@@ -34,44 +35,66 @@ type AuthProviderProps = {
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const { address, isConnected } = useWallet();
+  const { address, isConnected, connectWallet: connectWeb3Wallet } = useWallet();
   const navigate = useNavigate();
   const { toast } = useToast();
+
+  // Setup axios interceptor for auth
+  useEffect(() => {
+    const interceptor = axios.interceptors.request.use(
+      config => {
+        const token = localStorage.getItem('authToken');
+        if (token) {
+          config.headers.Authorization = `Bearer ${token}`;
+        }
+        return config;
+      },
+      error => Promise.reject(error)
+    );
+
+    return () => {
+      axios.interceptors.request.eject(interceptor);
+    };
+  }, []);
 
   // Check for existing authentication
   useEffect(() => {
     const checkAuth = async () => {
       setIsLoading(true);
       
-      // Check for token in localStorage
-      const token = localStorage.getItem('authToken');
-      
-      if (token) {
-        try {
-          // Verify token with backend
-          const response = await axios.get('/api/auth/profile', {
-            headers: { Authorization: `Bearer ${token}` }
-          });
-          
+      try {
+        // Check for token in localStorage
+        const token = localStorage.getItem('authToken');
+        
+        if (token) {
+          try {
+            // Verify token with backend
+            const response = await axios.get('http://localhost:3000/auth/profile');
+            
+            setUser({
+              id: response.data.userId,
+              email: response.data.email,
+              fullName: response.data.fullName,
+              isWalletUser: false
+            });
+          } catch (error) {
+            console.error('Auth token validation failed:', error);
+            localStorage.removeItem('authToken');
+            setUser(null);
+          }
+        } else if (isConnected && address) {
+          // User is connected with wallet
           setUser({
-            id: response.data.userId,
-            email: response.data.email,
-            isWalletUser: false
+            id: address,
+            address,
+            isWalletUser: true
           });
-        } catch (error) {
-          console.error('Auth token validation failed:', error);
-          localStorage.removeItem('authToken');
         }
-      } else if (isConnected && address) {
-        // User is connected with wallet
-        setUser({
-          id: address,
-          address,
-          isWalletUser: true
-        });
+      } catch (error) {
+        console.error('Auth check error:', error);
+      } finally {
+        setIsLoading(false);
       }
-      
-      setIsLoading(false);
     };
     
     checkAuth();
@@ -82,16 +105,19 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     setIsLoading(true);
     
     try {
-      const response = await axios.post('/api/auth/login', {
+      const response = await axios.post('http://localhost:3000/auth/login', {
         email,
         password
       });
       
-      localStorage.setItem('authToken', response.data.access_token);
+      const { access_token, user: userData } = response.data;
+      
+      localStorage.setItem('authToken', access_token);
       
       setUser({
-        id: response.data.user.id,
-        email: response.data.user.email,
+        id: userData.id,
+        email: userData.email,
+        fullName: userData.fullName,
         isWalletUser: false
       });
       
@@ -108,27 +134,39 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         title: "Login failed",
         description: "Invalid email or password",
       });
+      setUser(null);
     } finally {
       setIsLoading(false);
     }
   };
 
-  // Connect wallet (placeholder - actual implementation happens in wallet hook)
+  // Connect wallet
   const connectWallet = async () => {
-    // The actual connection is handled by the web3modal/wallet hooks
-    if (isConnected && address) {
-      setUser({
-        id: address,
-        address,
-        isWalletUser: true
-      });
+    try {
+      await connectWeb3Wallet?.();
       
+      // After wallet is connected, the useEffect will pick up the new wallet address
+      if (isConnected && address) {
+        setUser({
+          id: address,
+          address,
+          isWalletUser: true
+        });
+        
+        toast({
+          title: "Wallet connected",
+          description: "Welcome to Daily Wallet dashboard",
+        });
+        
+        navigate('/dashboard');
+      }
+    } catch (error) {
+      console.error('Wallet connection failed:', error);
       toast({
-        title: "Wallet connected",
-        description: "Welcome to Daily Wallet dashboard",
+        variant: "destructive",
+        title: "Connection failed",
+        description: "Could not connect to wallet",
       });
-      
-      navigate('/dashboard');
     }
   };
 
@@ -140,7 +178,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       title: "Logged out",
       description: "You have been logged out successfully",
     });
-    navigate('/');
+    navigate('/login');
   };
 
   return (

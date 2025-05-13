@@ -22,7 +22,7 @@ const RequireAuth = ({ children }: RequireAuthProps) => {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center">
         <Loader2 className="h-10 w-10 text-gold animate-spin" />
-        <p className="mt-4 text-white">Loading...</p>
+        <p className="mt-4 text-white">Authenticating...</p>
       </div>
     );
   }
