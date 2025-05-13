@@ -1,6 +1,6 @@
 
-import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsNumber, IsString, IsEnum, Min, Matches } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsString, IsEnum, Min, IsOptional, ValidateNested } from 'class-validator';
+import { Type } from 'class-transformer';
 
 export enum FiatCurrency {
   USD = 'USD',
@@ -9,85 +9,82 @@ export enum FiatCurrency {
 }
 
 export enum PaymentMethod {
-  CREDIT_CARD = 'credit_card',
-  DEBIT_CARD = 'debit_card',
+  CARD = 'card',
   BANK_TRANSFER = 'bank_transfer',
+  APPLE_PAY = 'apple_pay',
+  GOOGLE_PAY = 'google_pay',
 }
 
 export class OnRampDto {
-  @ApiProperty({ description: 'Amount to convert', example: 100 })
   @IsNumber()
+  @Min(10)
   @IsNotEmpty()
-  @Min(1)
   amount: number;
 
-  @ApiProperty({ description: 'Fiat currency', enum: FiatCurrency, example: 'USD' })
   @IsEnum(FiatCurrency)
   @IsNotEmpty()
   fiatCurrency: FiatCurrency;
 
-  @ApiProperty({ description: 'Crypto asset symbol', example: 'ETH' })
   @IsString()
   @IsNotEmpty()
-  @Matches(/^[A-Z0-9]+$/)
   cryptoAsset: string;
 
-  @ApiProperty({ description: 'Destination wallet address', example: '0x1234...' })
   @IsString()
   @IsNotEmpty()
-  @Matches(/^0x[a-fA-F0-9]{40}$/)
   walletAddress: string;
 
-  @ApiProperty({ description: 'Payment method', enum: PaymentMethod, example: 'credit_card' })
   @IsEnum(PaymentMethod)
   @IsNotEmpty()
   paymentMethod: PaymentMethod;
+
+  @IsString()
+  @IsOptional()
+  callbackUrl?: string;
+
+  @IsString()
+  @IsOptional()
+  userId?: string;
 }
 
 export class OffRampDto {
-  @ApiProperty({ description: 'Amount to convert', example: 0.5 })
   @IsNumber()
+  @Min(10)
   @IsNotEmpty()
-  @Min(0.01)
   amount: number;
-  
-  @ApiProperty({ description: 'Crypto asset symbol', example: 'ETH' })
+
   @IsString()
   @IsNotEmpty()
-  @Matches(/^[A-Z0-9]+$/)
   cryptoAsset: string;
-  
-  @ApiProperty({ description: 'Bank account ID for payout', example: 'ba_123456' })
+
+  @IsEnum(FiatCurrency)
+  @IsNotEmpty()
+  fiatCurrency: FiatCurrency;
+
   @IsString()
   @IsNotEmpty()
   bankAccountId: string;
-  
-  @ApiProperty({ description: 'Destination fiat currency', enum: FiatCurrency, example: 'USD' })
-  @IsEnum(FiatCurrency)
+
+  @IsString()
   @IsNotEmpty()
-  fiatCurrency: FiatCurrency;
+  walletAddress: string;
 }
 
-export class QuoteDto {
-  @ApiProperty({ description: 'Ramp type (on_ramp or off_ramp)', example: 'on_ramp' })
-  @IsString()
-  @IsNotEmpty()
-  @IsEnum(['on_ramp', 'off_ramp'])
-  type: 'on_ramp' | 'off_ramp';
-
-  @ApiProperty({ description: 'Amount to convert', example: 100 })
+export class QuoteResponseDto {
   @IsNumber()
-  @IsNotEmpty()
-  @Min(1)
-  amount: number;
+  amountToReceive: number;
 
-  @ApiProperty({ description: 'Fiat currency', enum: FiatCurrency, example: 'USD' })
-  @IsEnum(FiatCurrency)
-  @IsNotEmpty()
-  fiatCurrency: FiatCurrency;
+  @IsNumber()
+  fee: number;
 
-  @ApiProperty({ description: 'Crypto asset symbol', example: 'ETH' })
+  @IsNumber()
+  rate: number;
+
   @IsString()
-  @IsNotEmpty()
-  cryptoAsset: string;
+  estimatedTime: string;
+}
+
+export class TransactionRequestDto {
+  @ValidateNested()
+  @Type(() => OnRampDto)
+  onRampDetails: OnRampDto;
 }

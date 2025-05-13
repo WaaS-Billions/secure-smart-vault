@@ -100,11 +100,11 @@
 
 @layer components {
   .glass-card {
-    @apply backdrop-blur-md bg-navy/80 border border-gold/30 shadow-lg;
+    @apply backdrop-blur-md bg-white/[0.18] border border-gold/20 shadow-lg;
   }
   
   .glass-form {
-    @apply backdrop-blur-lg bg-navy/80 border border-gold/20 rounded-lg shadow-lg;
+    @apply backdrop-blur-xl bg-white/[0.18] border border-gold/20 rounded-lg shadow-lg;
   }
   
   .gold-gradient {
@@ -132,7 +132,7 @@
   }
   
   .paper-card {
-    @apply bg-white/5 backdrop-blur-md border border-gold/20 rounded-lg shadow-md;
+    @apply backdrop-blur-xl bg-white/[0.18] border-[1px] border-gold/20 rounded-lg shadow-sm;
   }
   
   .sidebar-item {
