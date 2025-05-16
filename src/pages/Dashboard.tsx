@@ -6,6 +6,7 @@ import SummaryCards from '@/components/dashboard/SummaryCards';
 import WalletGrid from '@/components/dashboard/WalletGrid';
 import QuickActions from '@/components/dashboard/QuickActions';
 import TransactionList from '@/components/dashboard/TransactionList';
+import WithdrawFunds from '@/components/dashboard/WithdrawFunds';
 
 const Dashboard = () => {
   const { wallets, transactions, isLoading, getTotalBalance } = useDashboardData();
@@ -29,7 +30,8 @@ const Dashboard = () => {
             <QuickActions />
           </div>
           
-          <div>
+          <div className="space-y-6">
+            <WithdrawFunds />
             <TransactionList transactions={transactions} />
           </div>
         </div>

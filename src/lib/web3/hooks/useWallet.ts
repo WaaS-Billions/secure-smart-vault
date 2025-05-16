@@ -1,7 +1,8 @@
 
 import { useState, useEffect } from 'react';
-import { useAccount, useBalance } from 'wagmi';
+import { useAccount, useBalance, useConnect } from 'wagmi';
 import { useChainId } from 'wagmi';
+import { injected } from 'wagmi/connectors';
 
 export function useWallet() {
   const { address, isConnected } = useAccount();
@@ -10,8 +11,18 @@ export function useWallet() {
     address,
   });
   
+  const { connect } = useConnect();
   const [isLoading, setIsLoading] = useState(true);
   const [networkName, setNetworkName] = useState<string | undefined>(undefined);
+
+  const connectWallet = async () => {
+    try {
+      await connect({ connector: injected() });
+    } catch (error) {
+      console.error("Failed to connect wallet:", error);
+      throw error;
+    }
+  };
 
   useEffect(() => {
     if (chainId) {
@@ -40,5 +51,6 @@ export function useWallet() {
     balance: balanceData?.formatted,
     symbol: balanceData?.symbol,
     isLoading,
+    connectWallet,
   };
 }
