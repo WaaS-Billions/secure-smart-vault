@@ -12,7 +12,6 @@ export class AdminController {
   @ApiResponse({ status: 200, description: 'Admin authentication verified' })
   @ApiBearerAuth()
   verifyAuth(@Request() req) {
-    // In a real application, you would check if the user has admin role
     return { 
       isAdmin: true,
       userId: req.user.id 

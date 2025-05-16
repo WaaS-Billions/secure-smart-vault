@@ -1,33 +1,33 @@
 
-import 'reflect-metadata';
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
-import { ValidationPipe } from '@nestjs/common';
+import { AppModule } from './app.module';
+import * as helmet from 'helmet';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   
+  // Apply security middleware
+  app.use(helmet());
+  
   // Enable CORS
   app.enableCors();
   
-  // Use validation pipe
-  app.useGlobalPipes(new ValidationPipe({ transform: true }));
-
-  // Setup Swagger
+  // Setup Swagger documentation
   const config = new DocumentBuilder()
     .setTitle('Daily Wallet API')
-    .setDescription('API documentation for Daily Wallet application')
+    .setDescription('API for Daily Wallet blockchain application')
     .setVersion('1.0')
     .addBearerAuth()
     .build();
+  
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
-
-  // Start the server
-  await app.listen(3000);
-  console.log(`Application is running on: http://localhost:3000`);
-  console.log(`Swagger documentation available at: http://localhost:3000/api`);
+  
+  // Start server
+  const port = process.env.PORT || 3000;
+  await app.listen(port);
+  console.log(`Application is running on: http://localhost:${port}`);
 }
 
 bootstrap();
