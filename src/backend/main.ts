@@ -7,7 +7,7 @@ import * as helmet from 'helmet';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   
-  // Apply security middleware
+  // Apply security middleware - using call without parentheses
   app.use(helmet());
   
   // Enable CORS
