@@ -33,17 +33,17 @@ const ConnectWalletButton = () => {
     }
   };
 
-  if (isConnected && address) {
-    return (
-      <Button 
-        onClick={() => navigate('/dashboard')} 
-        className="bg-gold text-navy hover:bg-gold/90 px-10 py-6 text-lg"
-      >
-        <Wallet className="mr-2 h-5 w-5" />
-        Go to Dashboard
-      </Button>
-    );
-  }
+  // if (isConnected && address) {
+  //   return (
+  //     <Button 
+  //       onClick={() => navigate('/dashboard')} 
+  //       className="bg-gold text-navy hover:bg-gold/90 px-10 py-6 text-lg"
+  //     >
+  //       <Wallet className="mr-2 h-5 w-5" />
+  //       Go to Dashboard
+  //     </Button>
+  //   );
+  // }
 
   return (
     <Button 
