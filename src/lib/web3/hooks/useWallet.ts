@@ -18,6 +18,7 @@ export function useWallet() {
   const connectWallet = async () => {
     try {
       await connect({ connector: injected() });
+      return true;
     } catch (error) {
       console.error("Failed to connect wallet:", error);
       throw error;
