@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -76,6 +77,9 @@ const App = () => {
                     <AdminDashboard />
                   </AdminAuthRequired>
                 } />
+                
+                {/* Additional routes */}
+                <Route path="/get-started" element={<Login />} />
                 
                 {/* 404 catch-all */}
                 <Route path="*" element={<NotFound />} />

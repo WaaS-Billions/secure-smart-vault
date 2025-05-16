@@ -5,21 +5,26 @@ import { Button } from '@/components/ui/button';
 import { Wallet } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useWallet } from '@/lib/web3/hooks/useWallet';
+import { injected } from 'wagmi/connectors';
+import { useConnect } from 'wagmi';
 
 const ConnectWalletButton = () => {
   const [isConnecting, setIsConnecting] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
-  const { address, isConnected, connectWallet } = useWallet();
+  const { address, isConnected } = useWallet();
+  const { connect } = useConnect();
 
   const handleConnectWallet = async () => {
     try {
       setIsConnecting(true);
-      await connectWallet();
+      await connect({ connector: injected() });
+      
       toast({
         title: "Wallet Connected",
         description: "Your wallet has been successfully connected.",
       });
+      
       navigate('/dashboard');
     } catch (error) {
       console.error('Failed to connect wallet:', error);
@@ -33,17 +38,17 @@ const ConnectWalletButton = () => {
     }
   };
 
-  // if (isConnected && address) {
-  //   return (
-  //     <Button 
-  //       onClick={() => navigate('/dashboard')} 
-  //       className="bg-gold text-navy hover:bg-gold/90 px-10 py-6 text-lg"
-  //     >
-  //       <Wallet className="mr-2 h-5 w-5" />
-  //       Go to Dashboard
-  //     </Button>
-  //   );
-  // }
+  if (isConnected && address) {
+    return (
+      <Button 
+        onClick={() => navigate('/dashboard')} 
+        className="bg-gold text-navy hover:bg-gold/90 px-10 py-6 text-lg"
+      >
+        <Wallet className="mr-2 h-5 w-5" />
+        Go to Dashboard
+      </Button>
+    );
+  }
 
   return (
     <Button 
