@@ -15,6 +15,10 @@ const Index = () => {
         
         <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-6 justify-center mb-16">
           <ConnectWalletButton />
+
+          <Button asChild variant="outline" size="lg" className="border-gold text-gold hover:bg-gold/10 px-10 py-6 text-lg">
+            <ConnectWalletButton />
+          </Button>
           
           <Button asChild variant="outline" size="lg" className="border-gold text-gold hover:bg-gold/10 px-10 py-6 text-lg">
             <Link to="/get-started">Get Merchant Account</Link>
