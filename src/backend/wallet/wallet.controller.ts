@@ -5,14 +5,11 @@ import {
   Post, 
   Body, 
   Param, 
-  UseGuards, 
-  Req
+  Headers
 } from '@nestjs/common';
 import { WalletService } from './wallet.service';
-import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
-import { CreateWalletDto, TransactionDto, OffRampDto } from './dto/wallet.dto';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { Request } from 'express';
+import { ApiTags, ApiOperation, ApiHeader } from '@nestjs/swagger';
+import { CreateWalletDto, TransactionDto } from './dto/wallet.dto';
 
 @ApiTags('wallets')
 @Controller('wallet')
@@ -21,48 +18,33 @@ export class WalletController {
 
   @Post()
   @ApiOperation({ summary: 'Create a new wallet' })
-  @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth()
-  async createWallet(@Req() req: Request, @Body() createWalletDto: CreateWalletDto) {
-    return this.walletService.createWallet(req.user['id'], createWalletDto);
+  @ApiHeader({ name: 'x-wallet-address', description: 'Connected wallet address' })
+  async createWallet(@Headers('x-wallet-address') walletAddress: string, @Body() createWalletDto: CreateWalletDto) {
+    return this.walletService.createWallet(walletAddress, createWalletDto);
   }
 
   @Get()
   @ApiOperation({ summary: 'Get all wallets for a user' })
-  @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth()
-  async getWallets(@Req() req: Request) {
-    return this.walletService.getWallets(req.user['id']);
+  @ApiHeader({ name: 'x-wallet-address', description: 'Connected wallet address' })
+  async getWallets(@Headers('x-wallet-address') walletAddress: string) {
+    return this.walletService.getWallets(walletAddress);
   }
 
   @Get(':address')
   @ApiOperation({ summary: 'Get wallet details by address' })
-  @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth()
-  async getWallet(@Req() req: Request, @Param('address') address: string) {
-    return this.walletService.getWallet(req.user['id'], address);
+  @ApiHeader({ name: 'x-wallet-address', description: 'Connected wallet address' })
+  async getWallet(@Headers('x-wallet-address') walletAddress: string, @Param('address') address: string) {
+    return this.walletService.getWallet(walletAddress, address);
   }
 
   @Post(':address/transaction')
   @ApiOperation({ summary: 'Create a new transaction' })
-  @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth()
+  @ApiHeader({ name: 'x-wallet-address', description: 'Connected wallet address' })
   async createTransaction(
-    @Req() req: Request,
+    @Headers('x-wallet-address') walletAddress: string,
     @Param('address') address: string,
     @Body() transactionDto: TransactionDto,
   ) {
-    return this.walletService.createTransaction(req.user['id'], address, transactionDto);
-  }
-
-  @Post('offramp')
-  @ApiOperation({ summary: 'Process an off-ramp transaction' })
-  @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth()
-  async processOffRamp(
-    @Req() req: Request,
-    @Body() offRampDto: OffRampDto,
-  ) {
-    return this.walletService.processOffRamp(req.user['id'], offRampDto);
+    return this.walletService.createTransaction(walletAddress, address, transactionDto);
   }
 }
