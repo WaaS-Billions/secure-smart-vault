@@ -5,46 +5,26 @@
 
 @layer base {
   :root {
-    --background: 222 39% 15%; /* Dark blue #121B39 */
-    --foreground: 60 0% 97%; /* White #f7f7f7 */
-
-    --card: 222 39% 15%; /* Dark blue #121B39 */
-    --card-foreground: 60 0% 97%; /* White #f7f7f7 */
-
-    --popover: 222 39% 15%; /* Dark blue #121B39 */
-    --popover-foreground: 60 0% 97%; /* White #f7f7f7 */
-
-    --primary: 222 39% 15%; /* Dark blue #121B39 */
-    --primary-foreground: 43 53% 70%; /* Gold #D9C88B */
-
-    --secondary: 43 53% 70%; /* Gold #D9C88B */
-    --secondary-foreground: 222 39% 15%; /* Dark blue #121B39 */
-
-    --muted: 222 39% 25%;
-    --muted-foreground: 60 0% 80%; /* Lighter white */
-
-    --accent: 43 53% 70%; /* Gold #D9C88B */
-    --accent-foreground: 222 39% 15%; /* Dark blue #121B39 */
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 60 0% 97%; /* White #f7f7f7 */
-
-    --border: 43 53% 70%; /* Gold #D9C88B */
-    --input: 222 39% 15%; /* Dark blue #121B39 */
-    --ring: 43 53% 70%; /* Gold #D9C88B */
-    
-    --sidebar: 222 39% 15%; /* Dark blue #121B39 */
-    --sidebar-foreground: 43 53% 70%; /* Gold #D9C88B */
-    --sidebar-border: 43 53% 30%; /* Darker gold */
-    --sidebar-accent: 43 53% 70%; /* Gold #D9C88B */
-    --sidebar-accent-foreground: 222 39% 15%; /* Dark blue #121B39 */
-    --sidebar-ring: 43 53% 70%; /* Gold #D9C88B */
-
+    --background: 222 39% 15%;
+    --foreground: 43 53% 70%;
+    --card: 222 39% 15%;
+    --card-foreground: 43 53% 70%;
+    --popover: 222 39% 15%;
+    --popover-foreground: 43 53% 70%;
+    --primary: 222 39% 15%;
+    --primary-foreground: 43 53% 70%;
+    --secondary: 43 53% 70%;
+    --secondary-foreground: 222 39% 15%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 43 53% 70%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 43 53% 70%;
     --radius: 0.5rem;
-  }
-
-  .dark {
-    /* ... keep existing code (dark mode variables) */
   }
 }
 
@@ -52,94 +32,29 @@
   * {
     @apply border-border;
   }
-
   body {
-    @apply bg-background text-foreground min-h-screen;
-    position: relative;
-  }
-  
-  /* Gold blob in the background */
-  body::before {
-    content: '';
-    position: absolute;
-    top: 10%;
-    right: 10%;
-    width: 60vw;
-    height: 60vw;
-    background: radial-gradient(circle, rgba(217,200,139,0.15) 0%, rgba(217,200,139,0) 70%);
-    border-radius: 50%;
-    z-index: -1;
-    animation: float 15s ease-in-out infinite;
-  }
-  
-  body::after {
-    content: '';
-    position: absolute;
-    bottom: 5%;
-    left: 5%;
-    width: 40vw;
-    height: 40vw;
-    background: radial-gradient(circle, rgba(217,200,139,0.1) 0%, rgba(217,200,139,0) 70%);
-    border-radius: 50%;
-    z-index: -1;
-    animation: float 20s ease-in-out infinite reverse;
-  }
-  
-  @keyframes float {
-    0% {
-      transform: translate(0px, 0px);
-    }
-    50% {
-      transform: translate(20px, 20px);
-    }
-    100% {
-      transform: translate(0px, 0px);
-    }
+    @apply bg-background text-foreground;
   }
 }
 
-@layer components {
-  .glass-card {
-    @apply backdrop-blur-md bg-white/[0.18] border border-gold/20 shadow-lg;
+@layer utilities {
+  .text-navy {
+    color: hsl(222, 39%, 15%);
   }
   
-  .glass-form {
-    @apply backdrop-blur-xl bg-white/[0.18] border border-gold/20 rounded-lg shadow-lg;
+  .bg-navy {
+    background-color: hsl(222, 39%, 15%);
   }
   
-  .gold-gradient {
-    @apply bg-gradient-to-r from-secondary to-secondary/90;
+  .text-gold {
+    color: hsl(43, 53%, 70%);
   }
   
-  .go-back-button {
-    @apply flex items-center text-secondary hover:text-secondary/80 transition-colors;
-  }
-
-  .title-text {
-    @apply text-gold font-bold;
+  .bg-gold {
+    background-color: hsl(43, 53%, 70%);
   }
   
-  .description-text {
-    @apply text-white;
-  }
-
-  .btn-gold {
-    @apply bg-gold text-navy hover:bg-gold/90 transition-colors;
-  }
-
-  .btn-navy {
-    @apply bg-navy text-gold hover:bg-navy/90 transition-colors;
-  }
-  
-  .paper-card {
-    @apply backdrop-blur-xl bg-white/[0.18] border-[1px] border-gold/20 rounded-lg shadow-sm;
-  }
-  
-  .sidebar-item {
-    @apply flex items-center gap-2 p-2 rounded-md w-full text-gold hover:bg-gold/10 transition-colors;
-  }
-  
-  .sidebar-item.active {
-    @apply bg-gold/10;
+  .border-gold {
+    border-color: hsl(43, 53%, 70%);
   }
 }

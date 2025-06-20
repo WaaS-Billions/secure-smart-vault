@@ -1,7 +1,6 @@
 
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { WalletModule } from './wallet/wallet.module';
 
 @Module({
   imports: [
@@ -9,7 +8,6 @@ import { WalletModule } from './wallet/wallet.module';
       isGlobal: true,
       envFilePath: ['.env', '.env.local'],
     }),
-    WalletModule,
   ],
 })
 export class AppModule {}

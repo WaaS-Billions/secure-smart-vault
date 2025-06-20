@@ -7,12 +7,9 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { WagmiProvider } from 'wagmi';
 import { config as wagmiConfig } from "@/lib/web3/wagmi-config";
 import Index from "./pages/Index";
-import NotFound from "./pages/NotFound";
 import Dashboard from "./pages/Dashboard";
 import CreateWallet from "./pages/CreateWallet";
 import WalletDetails from "./pages/WalletDetails";
-import MerchantApply from "./pages/MerchantApply";
-import ApplicationSubmitted from "./pages/ApplicationSubmitted";
 import { useEffect } from "react";
 
 const queryClient = new QueryClient();
@@ -34,9 +31,6 @@ const App = () => {
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/wallet/create" element={<CreateWallet />} />
               <Route path="/wallet/:address" element={<WalletDetails />} />
-              <Route path="/merchant/apply" element={<MerchantApply />} />
-              <Route path="/application-submitted" element={<ApplicationSubmitted />} />
-              <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
         </TooltipProvider>

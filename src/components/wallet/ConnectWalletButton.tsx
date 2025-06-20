@@ -55,7 +55,7 @@ const ConnectWalletButton = () => {
           className="border-gold text-gold hover:bg-gold/10 px-10 py-6 text-lg"
         >
           <Plus className="mr-2 h-5 w-5" />
-          Create New Wallet
+          Create Smart Wallet
         </Button>
       </div>
     );
@@ -86,7 +86,7 @@ const ConnectWalletButton = () => {
         className="border-gold text-gold hover:bg-gold/10 px-10 py-6 text-lg"
       >
         <Plus className="mr-2 h-5 w-5" />
-        Create New Wallet
+        Create Smart Wallet
       </Button>
     </div>
   );

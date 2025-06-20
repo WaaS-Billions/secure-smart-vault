@@ -1,124 +1,57 @@
 
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { 
-  Card, 
-  CardHeader, 
-  CardTitle, 
-  CardDescription, 
-  CardContent, 
-  CardFooter 
-} from "@/components/ui/card";
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form';
 import { useToast } from '@/hooks/use-toast';
-import { useWallet } from '@/lib/web3/hooks/useWallet';
-import axios from 'axios';
+import { ArrowLeft } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
-// Import our new components
-import WalletNameInput from '@/components/wallet/WalletNameInput';
-import WalletTypeSelector from '@/components/wallet/WalletTypeSelector';
-import MultiPartySettings from '@/components/wallet/MultiPartySettings';
-import WalletFormFooter from '@/components/wallet/WalletFormFooter';
+const walletFormSchema = z.object({
+  name: z.string().min(1, "Wallet name is required"),
+});
+
+type WalletFormValues = z.infer<typeof walletFormSchema>;
 
 const CreateWallet = () => {
-  const { isConnected, address } = useWallet();
-  const navigate = useNavigate();
   const { toast } = useToast();
-  
-  const [walletName, setWalletName] = useState('');
-  const [signers, setSigners] = useState('');
-  const [threshold, setThreshold] = useState('2');
+  const navigate = useNavigate();
   const [isCreating, setIsCreating] = useState(false);
-  const [walletType, setWalletType] = useState('personal'); // 'personal' or 'multiparty'
-
-  const handleCreateWallet = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (!isConnected) {
-      toast({
-        title: "Not connected",
-        description: "Please connect your wallet first.",
-        variant: "destructive",
-      });
-      return;
-    }
+  
+  const form = useForm<WalletFormValues>({
+    resolver: zodResolver(walletFormSchema),
+    defaultValues: {
+      name: "",
+    },
+  });
+  
+  const onSubmit = async (values: WalletFormValues) => {
+    setIsCreating(true);
     
     try {
-      setIsCreating(true);
+      console.log('Creating smart wallet on Base with values:', values);
       
-      // Prepare data based on wallet type
-      let signerAddresses: string[] = [];
-      let thresholdValue = 1;
+      // Simulate smart contract deployment
+      await new Promise(resolve => setTimeout(resolve, 2000));
       
-      if (walletType === 'multiparty') {
-        // Split signers by newline and remove empty lines
-        signerAddresses = signers
-          .split('\n')
-          .map(signer => signer.trim())
-          .filter(Boolean);
-        
-        if (signerAddresses.length === 0) {
-          toast({
-            title: "Invalid signers",
-            description: "Please add at least one signer.",
-            variant: "destructive",
-          });
-          setIsCreating(false);
-          return;
-        }
-        
-        // Include the current user's address as a signer if not already included
-        if (!signerAddresses.includes(address!)) {
-          signerAddresses.push(address!);
-        }
-        
-        // Validate threshold
-        thresholdValue = parseInt(threshold, 10);
-        if (isNaN(thresholdValue) || thresholdValue <= 0 || thresholdValue > signerAddresses.length) {
-          toast({
-            title: "Invalid threshold",
-            description: `Threshold must be between 1 and ${signerAddresses.length}.`,
-            variant: "destructive",
-          });
-          setIsCreating(false);
-          return;
-        }
-      } else {
-        // For personal wallets, only the current user is a signer
-        signerAddresses = [address!];
-        thresholdValue = 1; // Only one signature required
-      }
+      const mockWalletAddress = "0x" + Math.random().toString(16).substring(2, 42);
       
-      // Create wallet data
-      const walletData = {
-        name: walletName,
-        signers: signerAddresses,
-        threshold: thresholdValue,
-        type: walletType
-      };
+      toast({
+        title: "Smart Wallet Created Successfully",
+        description: "Your new smart wallet is ready to use on Base chain.",
+      });
       
-      try {
-        // Call your API to create the wallet
-        const response = await axios.post('/api/wallet', walletData);
-        
-        toast({
-          title: "Wallet created successfully",
-          description: "Your new smart wallet is ready to use.",
-        });
-        
-        navigate(`/wallet/${response.data.address}`);
-      } catch (error) {
-        console.error("API error:", error);
-        toast({
-          title: "Failed to create wallet",
-          description: "There was an error creating your wallet. Please try again.",
-          variant: "destructive",
-        });
-      }
+      navigate(`/wallet/${mockWalletAddress}`);
     } catch (error) {
-      console.error("Failed to create wallet:", error);
+      console.error("Error creating wallet:", error);
       toast({
         title: "Failed to create wallet",
-        description: "There was an error creating your smart wallet. Please try again.",
+        description: "Please try again later.",
         variant: "destructive",
       });
     } finally {
@@ -127,48 +60,68 @@ const CreateWallet = () => {
   };
 
   return (
-    <div className="container mx-auto py-8 max-w-2xl">
-      <h1 className="text-3xl font-bold mb-6">Create New Smart Wallet</h1>
-      
-      <Card>
-        <CardHeader>
-          <CardTitle>Wallet Configuration</CardTitle>
-          <CardDescription>
-            Set up your new smart wallet with your preferred security model.
-          </CardDescription>
-        </CardHeader>
-        <form onSubmit={handleCreateWallet}>
-          <CardContent className="space-y-6">
-            <WalletNameInput 
-              walletName={walletName} 
-              onWalletNameChange={(e) => setWalletName(e.target.value)} 
-            />
-            
-            <WalletTypeSelector 
-              walletType={walletType} 
-              onWalletTypeChange={setWalletType} 
-            />
-            
-            {walletType === 'multiparty' && (
-              <MultiPartySettings
-                signers={signers}
-                threshold={threshold}
-                onSignersChange={(e) => setSigners(e.target.value)}
-                onThresholdChange={(e) => setThreshold(e.target.value)}
-                connectedAddress={address}
-              />
-            )}
+    <div className="min-h-screen bg-gradient-to-br from-navy via-navy to-slate-900">
+      <div className="container max-w-2xl mx-auto py-8 px-4">
+        <div className="mb-6">
+          <Button asChild variant="outline" className="border-gold text-gold hover:bg-gold/10">
+            <Link to="/dashboard">
+              <ArrowLeft className="mr-2 h-4 w-4" />
+              Back to Dashboard
+            </Link>
+          </Button>
+        </div>
+        
+        <h1 className="text-3xl font-bold mb-8 text-gold">Create Smart Wallet</h1>
+        
+        <Card className="bg-white/5 backdrop-blur-sm border border-gold/20">
+          <CardHeader>
+            <CardTitle className="text-gold">Wallet Configuration</CardTitle>
+            <CardDescription className="text-white/70">
+              Set up your new smart wallet on Base chain.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="pt-6">
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+                <FormField
+                  control={form.control}
+                  name="name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-white">Wallet Name</FormLabel>
+                      <FormControl>
+                        <Input 
+                          placeholder="My Smart Wallet" 
+                          {...field} 
+                          className="bg-white/5 border-gold/20 text-white placeholder:text-white/50"
+                        />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+                
+                <div className="flex justify-end space-x-4">
+                  <Button 
+                    type="button" 
+                    variant="outline" 
+                    onClick={() => navigate('/dashboard')}
+                    className="border-gold text-gold hover:bg-gold/10"
+                  >
+                    Cancel
+                  </Button>
+                  <Button 
+                    type="submit" 
+                    disabled={isCreating}
+                    className="bg-gold text-navy hover:bg-gold/90"
+                  >
+                    {isCreating ? 'Creating...' : 'Create Wallet'}
+                  </Button>
+                </div>
+              </form>
+            </Form>
           </CardContent>
-          
-          <CardFooter>
-            <WalletFormFooter
-              onCancel={() => navigate('/dashboard')}
-              isCreating={isCreating}
-              isConnected={isConnected}
-            />
-          </CardFooter>
-        </form>
-      </Card>
+        </Card>
+      </div>
     </div>
   );
 };

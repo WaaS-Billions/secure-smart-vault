@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from 'react';
-import { useAccount, useBalance, useConnect } from 'wagmi';
+import { useAccount, useBalance, useConnect, useDisconnect } from 'wagmi';
 import { useChainId } from 'wagmi';
 import { injected } from 'wagmi/connectors';
 
@@ -12,6 +12,7 @@ export function useWallet() {
   });
   
   const { connect } = useConnect();
+  const { disconnect } = useDisconnect();
   const [isLoading, setIsLoading] = useState(true);
   const [networkName, setNetworkName] = useState<string | undefined>(undefined);
 
@@ -23,6 +24,10 @@ export function useWallet() {
       console.error("Failed to connect wallet:", error);
       throw error;
     }
+  };
+
+  const disconnectWallet = () => {
+    disconnect();
   };
 
   useEffect(() => {
@@ -50,5 +55,6 @@ export function useWallet() {
     symbol: balanceData?.symbol,
     isLoading,
     connectWallet,
+    disconnectWallet,
   };
 }
