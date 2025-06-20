@@ -18,14 +18,13 @@ async function bootstrap() {
     .setTitle('Daily Wallet API')
     .setDescription('API for Daily Wallet blockchain application')
     .setVersion('1.0')
-    .addBearerAuth()
     .build();
   
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
   
   // Start server
-  const port = process.env.PORT || 3000;
+  const port = process.env.PORT || 3001;
   await app.listen(port);
   console.log(`Application is running on: http://localhost:${port}`);
 }
