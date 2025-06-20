@@ -27,10 +27,9 @@ export function useWallet() {
 
   useEffect(() => {
     if (chainId) {
-      // Map chain IDs to network names
       const networks: Record<number, string> = {
-        1: 'Ethereum Mainnet',
-        11155111: 'Sepolia',
+        8453: 'Base Mainnet',
+        84532: 'Base Sepolia',
         31337: 'Localhost',
       };
       
@@ -39,10 +38,8 @@ export function useWallet() {
   }, [chainId]);
 
   useEffect(() => {
-    if (isConnected && balanceData) {
-      setIsLoading(false);
-    }
-  }, [isConnected, balanceData]);
+    setIsLoading(!isConnected);
+  }, [isConnected]);
 
   return {
     address,

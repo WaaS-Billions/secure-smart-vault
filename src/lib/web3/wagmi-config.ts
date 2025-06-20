@@ -1,20 +1,15 @@
 
 import { createConfig, http } from 'wagmi';
-import { mainnet, sepolia, localhost } from 'wagmi/chains';
-
-// Use import.meta.env instead of process.env for Vite applications
-const projectId = import.meta.env.VITE_WALLETCONNECT_PROJECT_ID || 'YOUR_PROJECT_ID';
+import { base, baseSepolia } from 'wagmi/chains';
 
 export const config = createConfig({
   chains: [
-    mainnet,
-    sepolia,
-    localhost
+    base,
+    baseSepolia
   ],
   transports: {
-    [mainnet.id]: http(),
-    [sepolia.id]: http(),
-    [localhost.id]: http()
+    [base.id]: http(),
+    [baseSepolia.id]: http()
   }
 });
 

@@ -9,25 +9,17 @@ import { config as wagmiConfig } from "@/lib/web3/wagmi-config";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Dashboard from "./pages/Dashboard";
-import AdminDashboard from "./pages/AdminDashboard";
 import CreateWallet from "./pages/CreateWallet";
 import WalletDetails from "./pages/WalletDetails";
-import OnRamp from "./pages/OnRamp";
-import OffRamp from "./pages/OffRamp";
-import Login from "./pages/Login";
-import { AuthProvider } from "./context/AuthContext";
-import RequireAuth from "./components/auth/RequireAuth";
-import AdminLogin from "./frontend/pages/AdminLogin";
-import AdminAuthRequired from "./frontend/components/auth/AdminAuthRequired";
+import MerchantApply from "./pages/MerchantApply";
+import ApplicationSubmitted from "./pages/ApplicationSubmitted";
 import { useEffect } from "react";
 
-// Create a React Query client
 const queryClient = new QueryClient();
 
 const App = () => {
-  // Set document title
   useEffect(() => {
-    document.title = "Daily Wallet - Non-custodial Smart Wallet";
+    document.title = "Daily Wallet - Non-custodial Smart Wallet on Base";
   }, []);
 
   return (
@@ -37,54 +29,15 @@ const App = () => {
           <Toaster />
           <Sonner />
           <BrowserRouter>
-            <AuthProvider>
-              <Routes>
-                {/* Public routes */}
-                <Route path="/" element={<Index />} />
-                <Route path="/login" element={<Login />} />
-                
-                {/* Protected routes */}
-                <Route path="/dashboard" element={
-                  <RequireAuth>
-                    <Dashboard />
-                  </RequireAuth>
-                } />
-                <Route path="/wallet/create" element={
-                  <RequireAuth>
-                    <CreateWallet />
-                  </RequireAuth>
-                } />
-                <Route path="/wallet/:address" element={
-                  <RequireAuth>
-                    <WalletDetails />
-                  </RequireAuth>
-                } />
-                <Route path="/onramp" element={
-                  <RequireAuth>
-                    <OnRamp />
-                  </RequireAuth>
-                } />
-                <Route path="/offramp" element={
-                  <RequireAuth>
-                    <OffRamp />
-                  </RequireAuth>
-                } />
-                
-                {/* Admin routes */}
-                <Route path="/admin/login" element={<AdminLogin />} />
-                <Route path="/admin" element={
-                  <AdminAuthRequired>
-                    <AdminDashboard />
-                  </AdminAuthRequired>
-                } />
-                
-                {/* Additional routes */}
-                <Route path="/get-started" element={<Login />} />
-                
-                {/* 404 catch-all */}
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </AuthProvider>
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/wallet/create" element={<CreateWallet />} />
+              <Route path="/wallet/:address" element={<WalletDetails />} />
+              <Route path="/merchant/apply" element={<MerchantApply />} />
+              <Route path="/application-submitted" element={<ApplicationSubmitted />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
           </BrowserRouter>
         </TooltipProvider>
       </WagmiProvider>
